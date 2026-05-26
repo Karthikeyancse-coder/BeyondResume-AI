@@ -8,6 +8,7 @@ interface User {
   email: string;
   role: Role;
   avatar?: string;
+  banner?: string;
 }
 
 interface AuthState {
@@ -16,6 +17,7 @@ interface AuthState {
   loginAsCandidate: () => void;
   loginAsRecruiter: () => void;
   logout: () => void;
+  updateUser: (data: Partial<User>) => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -33,4 +35,8 @@ export const useAuthStore = create<AuthState>((set) => ({
   }),
   
   logout: () => set({ user: null, isAuthenticated: false }),
+  
+  updateUser: (data) => set((state) => ({
+    user: state.user ? { ...state.user, ...data } : null
+  })),
 }));

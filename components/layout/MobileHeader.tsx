@@ -24,8 +24,12 @@ export default function MobileHeader() {
               <Bell className="w-5 h-5" />
               <span className="absolute top-0 right-0 w-2 h-2 bg-danger rounded-full border border-bg-secondary"></span>
             </button>
-            <Link href="/profile" className="flex items-center justify-center w-7 h-7 rounded-full bg-brand-gradient text-white font-bold text-xs">
-              {user?.name.charAt(0)}
+            <Link href="/profile" className="flex items-center justify-center w-7 h-7 rounded-full overflow-hidden bg-brand-gradient text-white font-bold text-xs">
+              {user?.avatar ? (
+                <img src={user.avatar} alt="Avatar" className="w-full h-full object-cover" />
+              ) : (
+                user?.name.charAt(0)
+              )}
             </Link>
           </>
         ) : (

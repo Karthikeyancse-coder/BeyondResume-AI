@@ -64,11 +64,11 @@ export default function Navbar() {
               <Bell className="w-5 h-5" />
               <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-danger rounded-full border border-bg-secondary"></span>
             </button>
-            <button className="flex items-center space-x-2 p-1 rounded-md hover:bg-bg-tertiary transition-colors">
+            <Link href="/profile" className="flex items-center space-x-2 p-1 rounded-md hover:bg-bg-tertiary transition-colors">
               <div className="w-8 h-8 rounded-full bg-brand-gradient flex items-center justify-center text-white font-bold text-sm">
                 {user?.name.charAt(0)}
               </div>
-            </button>
+            </Link>
           </>
         )}
       </div>

@@ -3,15 +3,16 @@
 import Link from "next/link";
 import { useAuthStore } from "@/store/useAuthStore";
 import ThemeToggle from "@/components/shared/ThemeToggle";
-import { Bell, Menu } from "lucide-react";
+import { Bell, Menu, BrainCircuit } from "lucide-react";
 
 export default function MobileHeader() {
   const { user, isAuthenticated } = useAuthStore();
 
   return (
     <header className="lg:hidden sticky top-0 z-50 w-full h-14 bg-bg-secondary/80 backdrop-blur-md border-b border-border-default flex items-center justify-between px-4 shadow-sm">
-      <Link href="/" className="font-display font-bold text-lg tracking-tight">
-        BeyondResume <span className="text-brand-cyan">AI</span>
+      <Link href="/" className="flex items-center space-x-1.5 font-display font-bold text-lg tracking-tight">
+        <BrainCircuit className="w-5 h-5 text-brand-indigo" />
+        <span>BeyondResume <span className="text-brand-cyan">AI</span></span>
       </Link>
       
       <div className="flex items-center space-x-3">

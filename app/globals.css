@@ -75,6 +75,9 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
+  .bg-brand-gradient {
+    background: var(--brand-gradient);
+  }
 }
 
 html,

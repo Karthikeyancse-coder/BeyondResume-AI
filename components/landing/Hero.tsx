@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { fadeUp, slideInLeft, slideInRight, staggerContainer, staggerItem } from "@/lib/animations";
 import AnimatedCounter from "../shared/AnimatedCounter";
+import { Rocket } from "lucide-react";
 
 export default function Hero() {
   return (
@@ -22,7 +23,7 @@ export default function Hero() {
           className="flex flex-col space-y-8"
         >
           <motion.div variants={fadeUp} className="inline-flex items-center space-x-2 bg-bg-tertiary px-4 py-2 rounded-full w-max border border-border-default shadow-sm">
-            <span className="text-xl">🚀</span>
+            <Rocket className="w-5 h-5 text-brand-cyan" />
             <span className="text-sm font-bold text-brand-indigo tracking-wide">AI-Powered Hiring Intelligence</span>
           </motion.div>
           

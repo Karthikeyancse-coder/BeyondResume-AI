@@ -2,21 +2,22 @@
 
 import { motion } from "framer-motion";
 import { fadeUp, staggerContainer } from "@/lib/animations";
+import { UserX, FileX, VolumeX } from "lucide-react";
 
 export default function ProblemSection() {
   const problems = [
     {
-      icon: "🎭",
+      icon: <UserX className="w-12 h-12 text-brand-indigo" />,
       title: "Fake Resumes",
       desc: "AI makes fabrication trivial. Resumes no longer prove capability.",
     },
     {
-      icon: "📄",
+      icon: <FileX className="w-12 h-12 text-brand-cyan" />,
       title: "Resume ≠ Skill",
       desc: "Documents can't show real depth or architectural reasoning.",
     },
     {
-      icon: "🔇",
+      icon: <VolumeX className="w-12 h-12 text-brand-violet" />,
       title: "Hidden Talent",
       desc: "Introverts and diverse thinkers are filtered before being seen.",
     },
@@ -42,7 +43,7 @@ export default function ProblemSection() {
                 variants={fadeUp}
                 className="flex flex-col items-center p-8 rounded-2xl bg-bg-primary border border-border-default hover:shadow-lg transition-shadow"
               >
-                <div className="text-5xl mb-6">{prob.icon}</div>
+                <div className="mb-6">{prob.icon}</div>
                 <h3 className="font-bold text-xl text-text-primary mb-3">{prob.title}</h3>
                 <p className="text-text-secondary">{prob.desc}</p>
               </motion.div>

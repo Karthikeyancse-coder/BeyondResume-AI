@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useAuthStore } from "@/store/useAuthStore";
 import ThemeToggle from "@/components/shared/ThemeToggle";
-import { Bell, UserCircle } from "lucide-react";
+import { Bell, UserCircle, BrainCircuit } from "lucide-react";
 
 export default function Navbar() {
   const { user, isAuthenticated } = useAuthStore();
@@ -12,8 +12,9 @@ export default function Navbar() {
     <nav className="hidden lg:flex sticky top-0 z-50 w-full h-16 bg-bg-secondary/80 backdrop-blur-md border-b border-border-default items-center justify-between px-8 shadow-sm">
       {/* Left: Logo */}
       <div className="flex items-center">
-        <Link href="/" className="font-display font-bold text-2xl tracking-tight">
-          BeyondResume <span className="text-brand-cyan">AI</span>
+        <Link href="/" className="flex items-center space-x-2 font-display font-bold text-2xl tracking-tight">
+          <BrainCircuit className="w-8 h-8 text-brand-indigo" />
+          <span>BeyondResume <span className="text-brand-cyan">AI</span></span>
         </Link>
       </div>
 

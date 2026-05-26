@@ -6,7 +6,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import {
   LogOut, MapPin, Briefcase, GraduationCap, Link as LinkIcon, CheckCircle2, Award, Calendar, Edit3,
-  Check, Trash2, Plus, Camera, ImagePlus, X, Save, FolderOpen, Heart, Globe, BrainCircuit, Code2, ShieldCheck
+  Check, Trash2, Plus, Camera, ImagePlus, X, Save, FolderOpen, Heart, Globe, BrainCircuit, Code2, ShieldCheck,
+  Pin, ExternalLink, Image as ImageIcon
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -18,6 +19,9 @@ interface ExperienceItem { role: string; company: string; duration: string; desc
 interface EducationItem { school: string; degree: string; year: string; }
 interface SkillItem { name: string; }
 interface CustomSection { id: string; title: string; content: string; }
+interface ProjectItem { id: string; name: string; desc: string; link: string; isPinned: boolean; }
+interface CertItem { id: string; name: string; issuer: string; date: string; image?: string; }
+interface LanguageItem { id: string; name: string; proficiency: number; }
 
 export default function ProfilePage() {
   const { user, isAuthenticated, logout, updateUser } = useAuthStore();
@@ -35,18 +39,22 @@ export default function ProfilePage() {
   const [location, setLocation] = useState("");
   const [connections, setConnections] = useState("500+ connections");
 
-  // About
+  // About & Experience & Education & Skills
   const [about, setAbout] = useState("");
-
-  // Experience
   const [experience, setExperience] = useState<ExperienceItem[]>([]);
-
-  // Education
   const [education, setEducation] = useState<EducationItem[]>([]);
-
-  // Skills
   const [skills, setSkills] = useState<SkillItem[]>([]);
   const [newSkill, setNewSkill] = useState("");
+
+  // New Specific Sections
+  const [projects, setProjects] = useState<ProjectItem[]>([]);
+  const [showProjects, setShowProjects] = useState(false);
+
+  const [certifications, setCertifications] = useState<CertItem[]>([]);
+  const [showCertifications, setShowCertifications] = useState(false);
+
+  const [languages, setLanguages] = useState<LanguageItem[]>([]);
+  const [showLanguages, setShowLanguages] = useState(false);
 
   // Custom Sections
   const [customSections, setCustomSections] = useState<CustomSection[]>([]);
@@ -65,19 +73,36 @@ export default function ProfilePage() {
       setAbout(isCand
         ? "Passionate backend engineer with 4+ years of experience building scalable microservices and resilient APIs. I thrive in high-performance environments and love solving complex architectural challenges. Always learning, currently diving deep into Kubernetes and distributed systems."
         : "Dedicated technical recruiter focused on finding and nurturing top engineering talent. I believe in skills over resumes and use data-driven insights to make fair, equitable hiring decisions.");
+      
       setExperience(isCand ? [
         { role: "Backend Engineer", company: "TechCorp", duration: "2022 - Present", desc: "Lead the migration from a monolithic architecture to microservices using Node.js and Docker. Reduced API latency by 40%." },
         { role: "Software Developer", company: "StartupX", duration: "2020 - 2022", desc: "Developed core features for a fintech platform. Integrated third-party payment gateways and maintained PostgreSQL databases." }
       ] : [
-        { role: "Senior Technical Recruiter", company: "TechCorp", duration: "2021 - Present", desc: "Managing end-to-end engineering hiring. Implemented skills-first assessment platforms." },
-        { role: "Talent Acquisition Specialist", company: "Global HR", duration: "2018 - 2021", desc: "Sourced candidates for Fortune 500 tech companies." }
+        { role: "Senior Technical Recruiter", company: "TechCorp", duration: "2021 - Present", desc: "Managing end-to-end engineering hiring. Implemented skills-first assessment platforms." }
       ]);
-      setEducation([
-        { degree: "B.S. Computer Science", school: "University of Technology", year: "2016 - 2020" }
-      ]);
+      
       setSkills(isCand
         ? [{ name: "Node.js" }, { name: "TypeScript" }, { name: "PostgreSQL" }, { name: "Docker" }, { name: "AWS" }, { name: "GraphQL" }, { name: "System Design" }]
-        : [{ name: "Technical Sourcing" }, { name: "Interviewing" }, { name: "Negotiation" }, { name: "DEI" }, { name: "Workday" }]);
+        : [{ name: "Technical Sourcing" }, { name: "Interviewing" }, { name: "Negotiation" }, { name: "DEI" }]);
+      
+      if (isCand) {
+        setShowProjects(true);
+        setProjects([
+          { id: "1", name: "AI Verification Platform", desc: "Built a fully automated AI assessment system using Next.js and Python.", link: "github.com/example/ai", isPinned: true },
+          { id: "2", name: "E-Commerce Microservices", desc: "Migrated a legacy monolith to a scalable Node.js microservices architecture.", link: "live-store.example.com", isPinned: false }
+        ]);
+        
+        setShowCertifications(true);
+        setCertifications([
+          { id: "1", name: "AWS Certified Solutions Architect", issuer: "Amazon Web Services", date: "Aug 2023", image: "" }
+        ]);
+
+        setShowLanguages(true);
+        setLanguages([
+          { id: "1", name: "English", proficiency: 5 },
+          { id: "2", name: "Spanish", proficiency: 3 }
+        ]);
+      }
     }
   }, [isAuthenticated, user, router]);
 
@@ -99,53 +124,52 @@ export default function ProfilePage() {
     reader.readAsDataURL(file);
   };
 
+  const handleCertImageUpload = (id: string, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setCertifications(certifications.map(c => c.id === id ? { ...c, image: reader.result as string } : c));
+    };
+    reader.readAsDataURL(file);
+  };
+
   const saveSection = (section: string) => {
     if (section === "info") updateUser({ name });
     setEditingSection(null);
   };
 
-  /* ── Experience Handlers ── */
-  const addExperience = () => setExperience([...experience, { role: "New Role", company: "Company", duration: "20XX - Present", desc: "Description..." }]);
-  const removeExperience = (idx: number) => setExperience(experience.filter((_, i) => i !== idx));
+  /* ── Handlers ── */
   const updateExperience = (idx: number, field: keyof ExperienceItem, value: string) => {
     const updated = [...experience];
     updated[idx] = { ...updated[idx], [field]: value };
     setExperience(updated);
   };
 
-  /* ── Education Handlers ── */
-  const addEducation = () => setEducation([...education, { school: "New School", degree: "Degree", year: "20XX - 20XX" }]);
-  const removeEducation = (idx: number) => setEducation(education.filter((_, i) => i !== idx));
-  const updateEducation = (idx: number, field: keyof EducationItem, value: string) => {
-    const updated = [...education];
-    updated[idx] = { ...updated[idx], [field]: value };
-    setEducation(updated);
-  };
-
-  /* ── Skills Handlers ── */
   const addSkill = () => {
     if (!newSkill.trim()) return;
     setSkills([...skills, { name: newSkill.trim() }]);
     setNewSkill("");
   };
-  const removeSkill = (idx: number) => setSkills(skills.filter((_, i) => i !== idx));
 
-  /* ── Custom Sections Handlers ── */
-  const addCustomSection = (title: string) => {
-    setCustomSections([...customSections, { id: Date.now().toString(), title, content: "Add content here..." }]);
+  const handleAddMenuClick = (type: string) => {
     setShowAddMenu(false);
-  };
-  const removeCustomSection = (id: string) => {
-    setCustomSections(customSections.filter((s) => s.id !== id));
-    if (editingSection === `custom-${id}`) setEditingSection(null);
+    if (type === "Projects") setShowProjects(true);
+    else if (type === "Certifications") setShowCertifications(true);
+    else if (type === "Languages") setShowLanguages(true);
+    else if (type === "Custom Section") {
+      setCustomSections([...customSections, { id: Date.now().toString(), title: "New Section", content: "Add content here..." }]);
+    }
   };
 
   if (!user) return null;
   const isCandidate = user.role === "CANDIDATE";
 
+  const proficiencies = ["Beginner", "Elementary", "Intermediate", "Advanced", "Professional / Native"];
+
   /* ── Reusable Section Component ── */
   const Section = ({ id, title, icon, children, onRemove }: { id: string; title: string; icon?: React.ReactNode; children: React.ReactNode; onRemove?: () => void }) => (
-    <motion.div variants={fadeUp} className="bg-bg-secondary p-6 md:p-8 rounded-2xl shadow-sm border border-border-default group/section relative">
+    <motion.div variants={fadeUp} className="bg-bg-secondary p-6 md:p-8 rounded-3xl shadow-sm border border-border-default group/section relative">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-display font-bold text-text-primary flex items-center gap-3">
           {icon && <span>{icon}</span>}
@@ -356,7 +380,7 @@ export default function ProfilePage() {
                     {skill.name}
                     {editingSection === "skills" && (
                       <button onClick={() => removeSkill(i)}
-                        className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-danger text-white rounded-full flex items-center justify-center opacity-0 group-hover/skill:opacity-100 transition-opacity">
+                        className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-danger text-white rounded-full flex items-center justify-center opacity-0 group-hover/skill:opacity-100 transition-opacity z-10">
                         <X className="w-3 h-3" />
                       </button>
                     )}
@@ -373,6 +397,45 @@ export default function ProfilePage() {
                 )}
               </div>
             </Section>
+
+            {/* Languages (Bar Chart) */}
+            {showLanguages && (
+              <Section id="languages" title="Languages" icon={<Globe className="w-6 h-6 text-brand-cyan" />} onRemove={() => setShowLanguages(false)}>
+                <div className="space-y-5">
+                  {languages.map((lang, i) => (
+                    <div key={lang.id} className="relative group/lang">
+                      {editingSection === "languages" ? (
+                        <div className="flex flex-col gap-2 bg-bg-primary p-3 rounded-xl border border-border-default">
+                           <div className="flex justify-between items-center gap-2">
+                             <input value={lang.name} onChange={(e) => setLanguages(languages.map((l, idx) => idx === i ? { ...l, name: e.target.value } : l))} className="font-bold text-text-primary bg-transparent outline-none flex-1" placeholder="Language" />
+                             <button onClick={() => setLanguages(languages.filter((_, idx) => idx !== i))} className="p-1 text-text-muted hover:text-danger rounded transition-colors"><Trash2 className="w-4 h-4" /></button>
+                           </div>
+                           <input type="range" min="1" max="5" step="1" value={lang.proficiency} onChange={(e) => setLanguages(languages.map((l, idx) => idx === i ? { ...l, proficiency: parseInt(e.target.value) } : l))} className="w-full cursor-pointer accent-brand-indigo" />
+                           <div className="text-xs text-text-muted text-right font-medium">{proficiencies[lang.proficiency - 1]}</div>
+                        </div>
+                      ) : (
+                        <>
+                          <div className="flex justify-between text-sm mb-1.5 font-bold">
+                            <span className="text-text-primary">{lang.name}</span>
+                            <span className="text-brand-indigo">{proficiencies[lang.proficiency - 1]}</span>
+                          </div>
+                          <div className="w-full h-2 bg-bg-tertiary rounded-full overflow-hidden flex shadow-inner">
+                            {[1, 2, 3, 4, 5].map((level) => (
+                              <div key={level} className={`flex-1 transition-all duration-500 ${level <= lang.proficiency ? 'bg-brand-indigo' : 'bg-transparent'} ${level < 5 ? 'border-r border-bg-secondary' : ''}`} />
+                            ))}
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  ))}
+                  {editingSection === "languages" && (
+                    <button onClick={() => setLanguages([...languages, { id: Date.now().toString(), name: "New Language", proficiency: 1 }])} className="w-full py-2 border-2 border-dashed border-border-default rounded-xl text-sm font-bold text-text-muted hover:text-brand-indigo hover:border-brand-indigo transition-colors flex items-center justify-center gap-2">
+                      <Plus className="w-4 h-4" /> Add Language
+                    </button>
+                  )}
+                </div>
+              </Section>
+            )}
 
           </motion.div>
 
@@ -426,7 +489,7 @@ export default function ProfilePage() {
                     <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] relative">
                       {editingSection === "experience" ? (
                         <div className="space-y-2 bg-bg-primary p-6 rounded-2xl border border-border-subtle relative">
-                           <button onClick={() => removeExperience(i)} className="absolute top-2 right-2 p-1.5 rounded-md text-text-muted hover:text-danger hover:bg-danger/10 transition-colors shrink-0">
+                           <button onClick={() => setExperience(experience.filter((_, idx) => idx !== i))} className="absolute top-2 right-2 p-1.5 rounded-md text-text-muted hover:text-danger hover:bg-danger/10 transition-colors shrink-0">
                              <Trash2 className="w-4 h-4" />
                            </button>
                            <input value={exp.role} onChange={(e) => updateExperience(i, "role", e.target.value)} className="font-bold text-text-primary bg-transparent border-b border-border-default focus:border-brand-indigo outline-none w-[90%]" placeholder="Role" />
@@ -450,14 +513,105 @@ export default function ProfilePage() {
                   </div>
                 ))}
                 {editingSection === "experience" && (
-                  <button onClick={addExperience} className="w-full py-4 border-2 border-dashed border-border-default rounded-xl text-sm font-bold text-text-muted hover:text-brand-indigo hover:border-brand-indigo transition-colors flex items-center justify-center gap-2 mt-4 relative z-10 bg-bg-secondary">
+                  <button onClick={() => setExperience([...experience, { role: "New Role", company: "Company", duration: "20XX - Present", desc: "Description..." }])} className="w-full py-4 border-2 border-dashed border-border-default rounded-xl text-sm font-bold text-text-muted hover:text-brand-indigo hover:border-brand-indigo transition-colors flex items-center justify-center gap-2 mt-4 relative z-10 bg-bg-secondary">
                     <Plus className="w-4 h-4" /> Add Experience
                   </button>
                 )}
               </div>
             </Section>
 
-            {/* Custom Sections */}
+            {/* Projects (Cards Layout) */}
+            {showProjects && (
+              <Section id="projects" title="Projects" icon={<FolderOpen className="w-6 h-6 text-brand-indigo" />} onRemove={() => setShowProjects(false)}>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {projects.map((proj, i) => (
+                    <div key={proj.id} className={cn("bg-bg-primary p-6 rounded-2xl border transition-colors relative group/project", proj.isPinned ? "border-brand-indigo/30 shadow-md" : "border-border-default")}>
+                      {editingSection === "projects" ? (
+                        <div className="space-y-3">
+                           <div className="flex justify-between items-start gap-2">
+                             <input value={proj.name} onChange={(e) => setProjects(projects.map((p, idx) => idx === i ? { ...p, name: e.target.value } : p))} className="font-bold text-lg text-text-primary bg-transparent outline-none w-[80%] border-b border-border-default focus:border-brand-indigo" placeholder="Project Name" />
+                             <button onClick={() => setProjects(projects.filter((_, idx) => idx !== i))} className="p-1.5 bg-danger/10 text-danger rounded-md hover:bg-danger/20 transition-colors shrink-0"><Trash2 className="w-4 h-4" /></button>
+                           </div>
+                           <textarea value={proj.desc} onChange={(e) => setProjects(projects.map((p, idx) => idx === i ? { ...p, desc: e.target.value } : p))} rows={2} className="w-full text-sm text-text-secondary bg-transparent outline-none resize-none border-b border-border-default focus:border-brand-indigo" placeholder="Description" />
+                           <input value={proj.link} onChange={(e) => setProjects(projects.map((p, idx) => idx === i ? { ...p, link: e.target.value } : p))} className="text-sm text-brand-indigo bg-transparent outline-none w-full border-b border-border-default focus:border-brand-indigo" placeholder="Project Link (URL)" />
+                           <label className="flex items-center gap-2 text-sm text-text-muted cursor-pointer mt-2">
+                             <input type="checkbox" checked={proj.isPinned} onChange={(e) => setProjects(projects.map((p, idx) => idx === i ? { ...p, isPinned: e.target.checked } : p))} className="accent-brand-indigo w-4 h-4" />
+                             Pin Project
+                           </label>
+                        </div>
+                      ) : (
+                        <>
+                          <div className="flex justify-between items-start mb-2">
+                            <h3 className="font-bold text-lg text-text-primary leading-tight">{proj.name}</h3>
+                            {proj.isPinned && <Pin className="w-4 h-4 text-brand-indigo shrink-0 mt-1" />}
+                          </div>
+                          <p className="text-sm text-text-secondary leading-relaxed mb-4">{proj.desc}</p>
+                          {proj.link && (
+                            <a href={`https://${proj.link.replace('https://', '')}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-sm font-bold text-brand-indigo hover:text-brand-violet transition-colors">
+                              <span>View Project</span>
+                              <ExternalLink className="w-3.5 h-3.5" />
+                            </a>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  ))}
+                  {editingSection === "projects" && (
+                    <button onClick={() => setProjects([...projects, { id: Date.now().toString(), name: "New Project", desc: "Description...", link: "", isPinned: false }])} className="h-full min-h-[160px] border-2 border-dashed border-border-default rounded-2xl flex flex-col items-center justify-center gap-2 text-text-muted hover:text-brand-indigo hover:border-brand-indigo transition-colors hover:bg-brand-indigo/5">
+                      <Plus className="w-6 h-6" />
+                      <span className="font-bold text-sm">Add Project</span>
+                    </button>
+                  )}
+                </div>
+              </Section>
+            )}
+
+            {/* Certifications (Cards with Image) */}
+            {showCertifications && (
+              <Section id="certifications" title="Certifications" icon={<Award className="w-6 h-6 text-brand-violet" />} onRemove={() => setShowCertifications(false)}>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {certifications.map((cert, i) => (
+                    <div key={cert.id} className="bg-bg-primary p-4 rounded-2xl border border-border-default flex gap-4">
+                      {editingSection === "certifications" ? (
+                        <div className="w-full flex gap-4 relative pr-6">
+                           <button onClick={() => setCertifications(certifications.filter((_, idx) => idx !== i))} className="absolute top-0 right-0 p-1 text-text-muted hover:text-danger rounded transition-colors"><Trash2 className="w-4 h-4" /></button>
+                           
+                           <label className="w-16 h-16 bg-bg-tertiary rounded-xl shrink-0 flex items-center justify-center cursor-pointer overflow-hidden border border-dashed border-border-default hover:border-brand-indigo transition-colors">
+                             <input type="file" accept="image/*" className="hidden" onChange={(e) => handleCertImageUpload(cert.id, e)} />
+                             {cert.image ? <img src={cert.image} className="w-full h-full object-cover" /> : <ImageIcon className="w-5 h-5 text-text-muted" />}
+                           </label>
+                           
+                           <div className="flex-1 space-y-2">
+                             <input value={cert.name} onChange={(e) => setCertifications(certifications.map((c, idx) => idx === i ? { ...c, name: e.target.value } : c))} className="font-bold text-text-primary bg-transparent border-b border-border-default focus:border-brand-indigo outline-none w-full" placeholder="Certification Name" />
+                             <input value={cert.issuer} onChange={(e) => setCertifications(certifications.map((c, idx) => idx === i ? { ...c, issuer: e.target.value } : c))} className="text-sm text-text-secondary bg-transparent border-b border-border-default focus:border-brand-indigo outline-none w-full" placeholder="Issuer (e.g. AWS)" />
+                             <input value={cert.date} onChange={(e) => setCertifications(certifications.map((c, idx) => idx === i ? { ...c, date: e.target.value } : c))} className="text-xs text-text-muted bg-transparent border-b border-border-default focus:border-brand-indigo outline-none w-full" placeholder="Date (e.g. Aug 2023)" />
+                           </div>
+                        </div>
+                      ) : (
+                        <>
+                          <div className="w-16 h-16 bg-bg-tertiary rounded-xl shrink-0 flex items-center justify-center border border-border-subtle overflow-hidden">
+                            {cert.image ? <img src={cert.image} className="w-full h-full object-cover" /> : <Award className="w-6 h-6 text-text-muted" />}
+                          </div>
+                          <div className="pt-1">
+                            <h3 className="font-bold text-text-primary leading-tight mb-1">{cert.name}</h3>
+                            <p className="text-sm text-text-secondary mb-0.5">{cert.issuer}</p>
+                            <p className="text-xs font-bold text-brand-indigo">{cert.date}</p>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  ))}
+                  {editingSection === "certifications" && (
+                    <button onClick={() => setCertifications([...certifications, { id: Date.now().toString(), name: "New Certification", issuer: "Issuer", date: "Date", image: "" }])} className="h-full min-h-[100px] border-2 border-dashed border-border-default rounded-2xl flex flex-col items-center justify-center gap-2 text-text-muted hover:text-brand-indigo hover:border-brand-indigo transition-colors hover:bg-brand-indigo/5">
+                      <Plus className="w-5 h-5" />
+                      <span className="font-bold text-sm">Add Certification</span>
+                    </button>
+                  )}
+                </div>
+              </Section>
+            )}
+
+            {/* Custom Generic Sections */}
             {customSections.map((section) => (
               <Section key={section.id} id={`custom-${section.id}`} title={section.title} icon={<FolderOpen className="w-6 h-6 text-brand-cyan" />} onRemove={() => removeCustomSection(section.id)}>
                 {editingSection === `custom-${section.id}` ? (
@@ -488,7 +642,7 @@ export default function ProfilePage() {
                 className="w-full py-5 border-2 border-dashed border-border-default rounded-2xl text-sm font-bold text-text-muted hover:text-brand-indigo hover:border-brand-indigo hover:bg-brand-indigo/5 transition-all flex items-center justify-center gap-2"
               >
                 <Plus className="w-5 h-5" />
-                Add Custom Section
+                Add Section
               </button>
 
               <AnimatePresence>
@@ -500,16 +654,14 @@ export default function ProfilePage() {
                     className="absolute left-0 right-0 bottom-full mb-2 bg-bg-secondary rounded-xl border border-border-default shadow-lg z-20 overflow-hidden"
                   >
                     {[
-                      { label: "Education", icon: <GraduationCap className="w-4 h-4" /> },
                       { label: "Projects", icon: <FolderOpen className="w-4 h-4" /> },
                       { label: "Certifications", icon: <Award className="w-4 h-4" /> },
                       { label: "Languages", icon: <Globe className="w-4 h-4" /> },
-                      { label: "Interests", icon: <Heart className="w-4 h-4" /> },
                       { label: "Custom Section", icon: <Plus className="w-4 h-4" /> },
                     ].map((item, i) => (
                       <button
                         key={i}
-                        onClick={() => addCustomSection(item.label)}
+                        onClick={() => handleAddMenuClick(item.label)}
                         className="w-full flex items-center gap-3 px-5 py-3 text-sm font-semibold text-text-secondary hover:bg-bg-tertiary hover:text-brand-indigo transition-colors text-left"
                       >
                         {item.icon}

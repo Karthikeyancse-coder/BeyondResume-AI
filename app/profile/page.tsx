@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import {
   LogOut, MapPin, Briefcase, GraduationCap, Link as LinkIcon, CheckCircle2, Award, Calendar, Edit3,
-  Check, Trash2, Plus, Camera, ImagePlus, X, Save, FolderOpen, Heart, Globe, BrainCircuit, Code2
+  Check, Trash2, Plus, Camera, ImagePlus, X, Save, FolderOpen, Heart, Globe, BrainCircuit, Code2, ShieldCheck
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";

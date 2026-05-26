@@ -9,7 +9,7 @@ import ScoreCard from "@/components/shared/ScoreCard";
 import CapabilityRadar from "@/components/shared/CapabilityRadar";
 import TrustMeter from "@/components/shared/TrustMeter";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, Clock, Github, Map } from "lucide-react";
+import { ArrowRight, CheckCircle2, Clock, GitBranch, Map } from "lucide-react";
 
 export default function CandidateDashboard() {
   const { user } = useAuthStore();
@@ -92,7 +92,7 @@ export default function CandidateDashboard() {
             
             <div className="bg-bg-secondary border border-border-default rounded-2xl p-6 shadow-sm">
               <div className="flex items-center space-x-3 mb-4">
-                <Github className="w-5 h-5 text-text-primary" />
+                <GitBranch className="w-5 h-5 text-text-primary" />
                 <h3 className="font-bold text-lg text-text-primary">GitHub Authenticity</h3>
               </div>
               <TrustMeter score={91} showRisk={true} />

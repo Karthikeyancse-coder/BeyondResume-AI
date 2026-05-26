@@ -36,7 +36,6 @@ function RegisterForm() {
   };
 
   return (
-  return (
     <div className="w-full max-w-md bg-bg-secondary p-8 rounded-3xl shadow-xl border border-border-default relative overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-1 bg-brand-gradient" />
       
@@ -126,7 +125,6 @@ function RegisterForm() {
             Sign in instead
           </Link>
         </div>
-      </div>
     </div>
   );
 }

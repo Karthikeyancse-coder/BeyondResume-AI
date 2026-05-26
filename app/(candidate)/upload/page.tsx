@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import PageWrapper from "@/components/layout/PageWrapper";
 import { fadeUp } from "@/lib/animations";
-import { UploadCloud, FileText, CheckCircle2, Github, Globe, ArrowRight } from "lucide-react";
+import { UploadCloud, FileText, CheckCircle2, GitBranch, Globe, ArrowRight } from "lucide-react";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -118,7 +118,7 @@ export default function UploadPage() {
                 className="flex flex-col space-y-6 w-full max-w-md mx-auto text-center"
               >
                 <div className="w-16 h-16 mx-auto rounded-2xl bg-brand-violet/10 flex items-center justify-center">
-                  <Github className="w-8 h-8 text-brand-violet" />
+                  <GitBranch className="w-8 h-8 text-brand-violet" />
                 </div>
                 <div>
                   <h2 className="font-display font-bold text-2xl text-text-primary mb-2">Connect GitHub</h2>

@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { fadeUp, staggerContainer } from "@/lib/animations";
-import { Bot, Github, Target, Compass, ShieldCheck, UserCheck } from "lucide-react";
+import { Bot, GitBranch, Target, Compass, ShieldCheck, UserCheck } from "lucide-react";
 
 export default function FeaturesSection() {
   const features = [
@@ -12,7 +12,7 @@ export default function FeaturesSection() {
       desc: "Simulates architectural discussions to test deep understanding.",
     },
     {
-      icon: <Github className="w-6 h-6 text-brand-indigo" />,
+      icon: <GitBranch className="w-6 h-6 text-brand-indigo" />,
       title: "GitHub Intelligence",
       desc: "Analyzes commit consistency, project evolution, and debugging maturity.",
     },

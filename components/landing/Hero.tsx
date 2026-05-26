@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { fadeUp, slideInLeft, slideInRight, staggerContainer, staggerItem } from "@/lib/animations";
+import { fadeUp, slideInLeft, slideInRight, staggerContainer } from "@/lib/animations";
 import AnimatedCounter from "../shared/AnimatedCounter";
 import { Rocket } from "lucide-react";
 

@@ -3,15 +3,15 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import PageWrapper from "@/components/layout/PageWrapper";
-import { fadeUp, staggerContainer, slideInRight } from "@/lib/animations";
-import { mockCandidatesForRecruiter, mockScoreBreakdown } from "@/lib/mock-data";
-import { Search, Plus, Filter, AlertTriangle, CheckCircle2, ChevronRight, X, Download } from "lucide-react";
+import { fadeUp, staggerContainer } from "@/lib/animations";
+import { mockCandidatesForRecruiter } from "@/lib/mock-data";
+import { Search, Plus, Filter, AlertTriangle, CheckCircle2, ChevronRight, X, Download, BarChart3, Users, ArrowRight, Clock } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 export default function RecruiterDashboard() {
   const [search, setSearch] = useState("");
-  const [selectedCandidate, setSelectedCandidate] = useState<any | null>(null);
+  const [selectedCandidate, setSelectedCandidate] = useState<typeof mockCandidatesForRecruiter[number] | null>(null);
 
   const filteredCandidates = mockCandidatesForRecruiter.filter(c => 
     c.name.toLowerCase().includes(search.toLowerCase()) || 
@@ -215,6 +215,85 @@ export default function RecruiterDashboard() {
               </motion.div>
             )}
           </AnimatePresence>
+        </div>
+
+        {/* ═══════════ NEW: Activity Feed + Quick Actions ═══════════ */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          
+          {/* Recent Activity Feed */}
+          <motion.div variants={fadeUp} className="lg:col-span-5 bg-bg-secondary p-6 rounded-2xl border border-border-default shadow-sm">
+            <h2 className="font-display font-bold text-lg text-text-primary mb-6 flex items-center gap-2">
+              <Clock className="w-5 h-5 text-brand-indigo" />
+              Recent Activity
+            </h2>
+            <div className="space-y-0">
+              {[
+                { color: "bg-success", text: "Arjun Mehta completed interview", time: "2h ago" },
+                { color: "bg-danger", text: "Sara Lin flagged as HIGH RISK", time: "5h ago" },
+                { color: "bg-brand-indigo", text: "New candidate Priya Sharma uploaded resume", time: "1d ago" },
+                { color: "bg-warning", text: "Backend Engineer job post received 12 applications", time: "2d ago" },
+                { color: "bg-success", text: "Dev Patel verified as authentic candidate", time: "3d ago" },
+                { color: "bg-brand-cyan", text: "Analytics report generated for Q2", time: "4d ago" },
+              ].map((item, i) => (
+                <div key={i} className="flex gap-4 py-3 group">
+                  {/* Timeline connector */}
+                  <div className="flex flex-col items-center shrink-0">
+                    <div className={cn("w-3 h-3 rounded-full shrink-0 mt-1.5 ring-4 ring-bg-secondary", item.color)} />
+                    {i < 5 && <div className="w-0.5 flex-1 bg-border-default mt-1" />}
+                  </div>
+                  <div className="flex-1 pb-2">
+                    <p className="text-sm text-text-primary font-medium leading-snug">{item.text}</p>
+                    <p className="text-xs text-text-muted mt-1">{item.time}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Quick Actions */}
+          <motion.div variants={fadeUp} className="lg:col-span-7 space-y-4">
+            <h2 className="font-display font-bold text-lg text-text-primary flex items-center gap-2">
+              Quick Actions
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {[
+                {
+                  title: "Post New Job",
+                  subtitle: "Create a job posting to attract candidates",
+                  href: "/recruiter/post-job",
+                  icon: <Plus className="w-7 h-7" />,
+                  gradient: "from-brand-indigo to-brand-violet",
+                },
+                {
+                  title: "View Analytics",
+                  subtitle: "Deep-dive into evaluation data & trends",
+                  href: "/recruiter/analytics",
+                  icon: <BarChart3 className="w-7 h-7" />,
+                  gradient: "from-brand-cyan to-brand-indigo",
+                },
+                {
+                  title: "All Candidates",
+                  subtitle: "Manage and evaluate all candidate profiles",
+                  href: "/recruiter/candidates",
+                  icon: <Users className="w-7 h-7" />,
+                  gradient: "from-brand-violet to-brand-indigo",
+                },
+              ].map((action, i) => (
+                <Link key={i} href={action.href}
+                  className="bg-bg-secondary p-6 rounded-2xl border border-border-default shadow-sm hover:shadow-md hover:border-brand-indigo/30 transition-all group flex flex-col">
+                  <div className={cn("w-14 h-14 rounded-2xl bg-gradient-to-br flex items-center justify-center text-white mb-4 shadow-md group-hover:scale-105 transition-transform", action.gradient)}>
+                    {action.icon}
+                  </div>
+                  <h3 className="font-bold text-text-primary group-hover:text-brand-indigo transition-colors">{action.title}</h3>
+                  <p className="text-xs text-text-muted mt-1 leading-relaxed flex-1">{action.subtitle}</p>
+                  <div className="flex items-center gap-1 mt-3 text-xs font-bold text-brand-indigo opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span>Open</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </motion.div>
         </div>
 
       </motion.div>

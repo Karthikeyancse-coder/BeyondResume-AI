@@ -11,7 +11,6 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 /* ── Types ── */
@@ -60,7 +59,6 @@ export default function ProfilePage() {
 
   // Skills
   const [skills, setSkills] = useState<SkillItem[]>([]);
-  const [newSkill, setNewSkill] = useState("");
 
   // Projects
   const [projects, setProjects] = useState<ProjectItem[]>([]);

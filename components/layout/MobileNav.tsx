@@ -36,8 +36,8 @@ export default function MobileNav() {
       return [
         { href: "/recruiter/dashboard", label: "Home", icon: Home },
         { href: "/recruiter/post-job", label: "Post Job", icon: PlusSquare },
-        { href: "/recruiter/dashboard", label: "Candidates", icon: Users },
-        { href: "/recruiter/dashboard", label: "Analytics", icon: BarChart2 },
+        { href: "/recruiter/candidates", label: "Candidates", icon: Users },
+        { href: "/recruiter/analytics", label: "Analytics", icon: BarChart2 },
         { href: "/recruiter/dashboard", label: "Settings", icon: Settings },
       ];
     }

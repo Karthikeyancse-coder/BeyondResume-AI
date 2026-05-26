@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import PageWrapper from "@/components/layout/PageWrapper";
 import { fadeUp, staggerContainer } from "@/lib/animations";
-import { useAuthStore } from "@/store/useAuthStore";
 import { mockScoreBreakdown, mockGitHubAnalysis } from "@/lib/mock-data";
 import ScoreCard from "@/components/shared/ScoreCard";
 import CapabilityRadar from "@/components/shared/CapabilityRadar";
@@ -12,7 +11,6 @@ import { CheckCircle2, Download, Share2, Sparkles } from "lucide-react";
 import Link from "next/link";
 
 export default function ScoresPage() {
-  const { user } = useAuthStore();
   
   const radarData = Object.entries(mockScoreBreakdown.capability.breakdown).map(([key, value]) => ({
     subject: key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1').trim(),

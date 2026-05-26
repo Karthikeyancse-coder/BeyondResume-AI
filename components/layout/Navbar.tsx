@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useAuthStore } from "@/store/useAuthStore";
 import ThemeToggle from "@/components/shared/ThemeToggle";
-import { Bell, UserCircle, BrainCircuit } from "lucide-react";
+import { Bell, BrainCircuit } from "lucide-react";
 
 export default function Navbar() {
   const { user, isAuthenticated } = useAuthStore();
@@ -39,8 +39,8 @@ export default function Navbar() {
           <>
             <Link href="/recruiter/dashboard" className="hover:text-brand-indigo transition-colors">Dashboard</Link>
             <Link href="/recruiter/post-job" className="hover:text-brand-indigo transition-colors">Post Job</Link>
-            <Link href="/recruiter/dashboard" className="hover:text-brand-indigo transition-colors">Candidates</Link>
-            <Link href="/recruiter/dashboard" className="hover:text-brand-indigo transition-colors">Analytics</Link>
+            <Link href="/recruiter/candidates" className="hover:text-brand-indigo transition-colors">Candidates</Link>
+            <Link href="/recruiter/analytics" className="hover:text-brand-indigo transition-colors">Analytics</Link>
           </>
         ) : null}
       </div>

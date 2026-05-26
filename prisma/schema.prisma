@@ -1,0 +1,165 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  role          Role      @default(CANDIDATE)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  candidateProfile CandidateProfile?
+  recruiterProfile RecruiterProfile?
+  accounts         Account[]
+  sessions         Session[]
+}
+
+enum Role {
+  CANDIDATE
+  RECRUITER
+  ADMIN
+}
+
+model CandidateProfile {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  resumeUrl         String?
+  githubUrl         String?
+  portfolioUrl      String?
+
+  // Scores
+  capabilityScore   Float?
+  authenticityScore Float?
+  alignmentScore    Float?
+  growthScore       Float?
+  finalScore        Float?
+
+  isVerified        Boolean  @default(false)
+  
+  // Relations
+  interviews        Interview[]
+  roadmap           Roadmap?
+}
+
+model RecruiterProfile {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  companyName String
+  companyUrl  String?
+  
+  // Relations
+  jobs        Job[]
+}
+
+model Job {
+  id                 String   @id @default(cuid())
+  recruiterId        String
+  recruiter          RecruiterProfile @relation(fields: [recruiterId], references: [id])
+  
+  title              String
+  description        String   @db.Text
+  experienceLevel    String
+  location           String
+  isRemote           Boolean  @default(false)
+  
+  // Alignment Weights
+  weightTechnical    Int      @default(80)
+  weightAuthenticity Int      @default(60)
+  weightAlignment    Int      @default(80)
+  weightGrowth       Int      @default(50)
+  weightCommunication Int     @default(30)
+  
+  skills             String[] // Array of required skills
+  
+  isActive           Boolean  @default(true)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model Interview {
+  id                 String   @id @default(cuid())
+  candidateProfileId String
+  candidateProfile   CandidateProfile @relation(fields: [candidateProfileId], references: [id])
+  
+  status             String   @default("PENDING") // PENDING, IN_PROGRESS, COMPLETED
+  startedAt          DateTime?
+  completedAt        DateTime?
+  
+  questions          Question[]
+}
+
+model Question {
+  id          String   @id @default(cuid())
+  interviewId String
+  interview   Interview @relation(fields: [interviewId], references: [id], onDelete: Cascade)
+  
+  content     String   @db.Text
+  depth       String   // medium, deep, advanced
+  answer      String?  @db.Text
+  
+  aiScore     Float?
+  aiFeedback  String?  @db.Text
+}
+
+model Roadmap {
+  id                 String   @id @default(cuid())
+  candidateProfileId String   @unique
+  candidateProfile   CandidateProfile @relation(fields: [candidateProfileId], references: [id], onDelete: Cascade)
+  
+  missingSkills      Json     // Array of skills with priority
+  recommendedProjects Json    // Array of project objects
+  estimatedTime      String
+}
+
+// NextAuth standard models
+model Account {
+  id                 String  @id @default(cuid())
+  userId             String
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?  @db.Text
+  access_token       String?  @db.Text
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?  @db.Text
+  session_state      String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}

@@ -9,8 +9,44 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        bg: {
+          primary: "var(--bg-primary)",
+          secondary: "var(--bg-secondary)",
+          tertiary: "var(--bg-tertiary)",
+          hover: "var(--bg-hover)",
+        },
+        text: {
+          primary: "var(--text-primary)",
+          secondary: "var(--text-secondary)",
+          muted: "var(--text-muted)",
+          inverse: "var(--text-inverse)",
+        },
+        brand: {
+          indigo: "var(--brand-indigo)",
+          violet: "var(--brand-violet)",
+          cyan: "var(--brand-cyan)",
+        },
+        semantic: {
+          success: "var(--success)",
+          warning: "var(--warning)",
+          danger: "var(--danger)",
+          info: "var(--info)",
+        },
+        border: {
+          default: "var(--border-default)",
+          subtle: "var(--border-subtle)",
+          strong: "var(--border-strong)",
+        }
+      },
+      boxShadow: {
+        sm: "var(--shadow-sm)",
+        md: "var(--shadow-md)",
+        lg: "var(--shadow-lg)",
+        glow: "var(--shadow-glow)",
+      },
+      fontFamily: {
+        display: ["var(--font-display)"],
+        body: ["var(--font-body)"],
       },
     },
   },

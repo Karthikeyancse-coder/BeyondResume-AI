@@ -44,6 +44,9 @@ const config: Config = {
         lg: "var(--shadow-lg)",
         glow: "var(--shadow-glow)",
       },
+      backgroundImage: {
+        "brand-gradient": "var(--brand-gradient)",
+      },
       fontFamily: {
         display: ["var(--font-display)"],
         body: ["var(--font-body)"],

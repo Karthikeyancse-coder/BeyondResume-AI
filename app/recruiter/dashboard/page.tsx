@@ -151,7 +151,7 @@ export default function RecruiterDashboard() {
             )}
           </motion.div>
 
-          {/* Side Panel (Desktop only for MVP simplicity, hides if none selected) */}
+          {/* Side Panel */}
           <AnimatePresence>
             {selectedCandidate && (
               <motion.div

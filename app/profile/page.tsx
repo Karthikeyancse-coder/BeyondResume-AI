@@ -520,7 +520,7 @@ export default function ProfilePage() {
                         <>
                           <div className="flex justify-between items-start mb-2">
                             <h3 className="font-bold text-lg text-text-primary leading-tight">{proj.name}</h3>
-                            {proj.isPinned && <Pin className="w-4 h-4 text-brand-indigo shrink-0 mt-1" />}
+                            {proj.isPinned && <Star className="w-4 h-4 text-brand-indigo shrink-0 mt-1 fill-brand-indigo" />}
                           </div>
                           <p className="text-sm text-text-secondary leading-relaxed mb-3">{proj.desc}</p>
                           {proj.tech && <div className="flex flex-wrap gap-1.5 mb-3">{proj.tech.split(",").map((t, ti) => <span key={ti} className="text-[11px] font-bold px-2 py-0.5 bg-bg-tertiary text-text-muted rounded-md border border-border-subtle">{t.trim()}</span>)}</div>}

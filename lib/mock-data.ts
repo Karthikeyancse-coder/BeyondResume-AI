@@ -247,3 +247,75 @@ export const mockRecommendedJobs = [
     postedAt: "5 hours ago",
   },
 ];
+
+export const mockCompanyInterviews = [
+  // TODO: REPLACE WITH API → GET /api/interviews/approved/:candidateId
+  {
+    id: "ci_001",
+    companyName: "Infosys",
+    companyLogo: "I",
+    jobRole: "MERN Stack Developer",
+    interviewType: "coding",
+    status: "Approved",
+    interviewDate: "2026-05-28T10:00:00Z"
+  },
+  {
+    id: "ci_002",
+    companyName: "TCS",
+    companyLogo: "T",
+    jobRole: "Frontend Developer",
+    interviewType: "qa",
+    status: "Approved",
+    interviewDate: "2026-05-29T14:30:00Z"
+  },
+  {
+    id: "ci_003",
+    companyName: "Wipro",
+    companyLogo: "W",
+    jobRole: "Backend Engineer",
+    interviewType: "mcq",
+    status: "Approved",
+    interviewDate: "2026-06-02T11:00:00Z"
+  }
+];
+
+export const mockCodingExam = {
+  // TODO: REPLACE WITH API → GET /api/interviews/coding/:id
+  id: "coding_001",
+  title: "Two Sum Problem",
+  description: "Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.\nYou may assume that each input would have exactly one solution, and you may not use the same element twice.",
+  examples: [
+    { input: "nums = [2,7,11,15], target = 9", output: "[0,1]" },
+    { input: "nums = [3,2,4], target = 6", output: "[1,2]" }
+  ],
+  timeLimitMinutes: 45
+};
+
+export const mockCompanyQAQuestions = [
+  // TODO: REPLACE WITH API → GET /api/interviews/qa/:id
+  { id: "cqa_1", question: "Tell me about yourself and your journey as a developer." },
+  { id: "cqa_2", question: "Explain React Hooks and how you've used them in your projects." },
+  { id: "cqa_3", question: "What is a REST API and what are the best practices for designing one?" }
+];
+
+export const mockCompanyMCQQuestions = [
+  // TODO: REPLACE WITH API → GET /api/interviews/mcq/:id
+  {
+    id: "mcq_1",
+    question: "What does CSS stand for?",
+    options: ["Creative Style Sheets", "Cascading Style Sheets", "Computer Style Sheets", "Colorful Style Sheets"],
+    correctAnswerIndex: 1
+  },
+  {
+    id: "mcq_2",
+    question: "Which hook is used for side effects in React?",
+    options: ["useState", "useMemo", "useEffect", "useRef"],
+    correctAnswerIndex: 2
+  },
+  {
+    id: "mcq_3",
+    question: "What is the time complexity of binary search?",
+    options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"],
+    correctAnswerIndex: 2
+  }
+];

@@ -53,6 +53,7 @@ model CandidateProfile {
   
   // Relations
   interviews        Interview[]
+  companyInterviews CompanyInterview[]
   roadmap           Roadmap?
 }
 
@@ -91,6 +92,9 @@ model Job {
   isActive           Boolean  @default(true)
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
+  
+  // Relations
+  companyInterviews  CompanyInterview[]
 }
 
 model Interview {
@@ -103,6 +107,24 @@ model Interview {
   completedAt        DateTime?
   
   questions          Question[]
+}
+
+model CompanyInterview {
+  id                 String   @id @default(cuid())
+  jobId              String
+  job                Job      @relation(fields: [jobId], references: [id])
+  candidateProfileId String
+  candidateProfile   CandidateProfile @relation(fields: [candidateProfileId], references: [id])
+  
+  interviewType      String   // "coding", "qa", "mcq"
+  status             String   @default("PENDING") // PENDING, APPROVED, REJECTED, COMPLETED
+  scheduledDate      DateTime?
+  
+  score              Float?
+  resultData         Json?    // Store answers, code submissions, etc.
+  
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 }
 
 model Question {

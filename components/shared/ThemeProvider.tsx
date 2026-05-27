@@ -7,21 +7,21 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
   const { theme } = useThemeStore();
   const [mounted, setMounted] = useState(false);
 
-  // Prevent hydration mismatch
   useEffect(() => {
     setMounted(true);
   }, []);
 
   useEffect(() => {
-    if (mounted) {
-      document.documentElement.setAttribute("data-theme", theme);
+    const root = document.documentElement;
+    // Set data-theme for CSS variables (used by Navbar, etc.)
+    root.setAttribute("data-theme", theme);
+    // Set/remove 'dark' class for Tailwind dark: variants
+    if (theme === "dark") {
+      root.classList.add("dark");
+    } else {
+      root.classList.remove("dark");
     }
   }, [theme, mounted]);
-
-  // If not mounted yet, render without theme (or default to light) to avoid SSR hydration mismatch
-  if (!mounted) {
-    return <>{children}</>;
-  }
 
   return <>{children}</>;
 }

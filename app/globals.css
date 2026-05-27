@@ -95,15 +95,11 @@ body {
   box-sizing: border-box;
 }
 
-/* For React Hook Form standard overrides */
+/* For React Hook Form standard overrides — only reset box-sizing and outline */
 input, textarea, select {
-  background-color: var(--bg-secondary);
-  color: var(--text-primary);
-  border: 1px solid var(--border-default);
+  box-sizing: border-box;
 }
 
 input:focus, textarea:focus, select:focus {
   outline: none;
-  border-color: var(--brand-indigo);
-  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
 }

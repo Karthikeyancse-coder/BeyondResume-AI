@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useAuthStore } from "@/store/useAuthStore";
 import { 
   Home, Sparkles, Lightbulb, LogIn, Rocket,
-  Upload, Bot, BarChart2, Map, PlusSquare, Users, Settings 
+  Bot, BarChart2, Map, PlusSquare, Users, Settings, Briefcase
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -26,10 +26,10 @@ export default function MobileNav() {
     if (user?.role === "CANDIDATE") {
       return [
         { href: "/dashboard", label: "Home", icon: Home },
-        { href: "/upload", label: "Upload", icon: Upload },
         { href: "/interview", label: "Interview", icon: Bot },
         { href: "/scores", label: "Scores", icon: BarChart2 },
         { href: "/roadmap", label: "Roadmap", icon: Map },
+        { href: "/job", label: "Jobs", icon: Briefcase },
       ];
     }
     if (user?.role === "RECRUITER") {

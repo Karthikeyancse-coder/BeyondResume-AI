@@ -34,6 +34,7 @@ export default function Navbar() {
             <Link href="/interview" className="hover:text-brand-indigo transition-colors">Interview</Link>
             <Link href="/scores" className="hover:text-brand-indigo transition-colors">Scores</Link>
             <Link href="/roadmap" className="hover:text-brand-indigo transition-colors">Roadmap</Link>
+            <Link href="/job" className="hover:text-brand-indigo transition-colors">Jobs</Link>
           </>
         ) : user?.role === "RECRUITER" ? (
           <>

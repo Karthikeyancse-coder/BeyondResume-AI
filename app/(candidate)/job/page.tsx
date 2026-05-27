@@ -1,10 +1,20 @@
 "use client";
 
+import { useState } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { mockRecommendedJobs } from "@/lib/mock-data";
-import { Building2, MapPin, DollarSign, Clock, CheckCircle2, AlertCircle, ArrowRight, Sparkles } from "lucide-react";
+import { Building2, MapPin, DollarSign, Clock, CheckCircle2, AlertCircle, ArrowRight, Sparkles, Upload } from "lucide-react";
 
 export default function RecommendedJobsPage() {
+  const [appliedJobs, setAppliedJobs] = useState<string[]>([]);
+
+  const handleApply = (jobId: string) => {
+    if (!appliedJobs.includes(jobId)) {
+      setAppliedJobs(prev => [...prev, jobId]);
+    }
+  };
+
   return (
     <div className="max-w-6xl mx-auto space-y-8">
       {/* Header */}
@@ -18,9 +28,13 @@ export default function RecommendedJobsPage() {
             <Sparkles className="w-5 h-5 text-brand-cyan" />
             <h1 className="text-3xl font-display font-bold">Recommended Jobs</h1>
           </div>
-          <p className="text-white/80 max-w-2xl text-lg">
+          <p className="text-white/80 max-w-2xl text-lg mb-6">
             Based on your AI Capability Interview and profile analysis, we&apos;ve found these roles that perfectly align with your skills and growth potential.
           </p>
+          <Link href="/upload" className="inline-flex items-center space-x-2 bg-white text-brand-indigo hover:bg-bg-secondary px-6 py-3 rounded-xl font-bold transition-colors shadow-md">
+            <Upload className="w-5 h-5" />
+            <span>Upload New Resume</span>
+          </Link>
         </div>
         <div className="absolute top-0 right-0 -mt-8 -mr-8 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
         <div className="absolute bottom-0 left-1/4 w-48 h-48 bg-brand-cyan/20 rounded-full blur-2xl" />
@@ -122,9 +136,26 @@ export default function RecommendedJobsPage() {
 
                 {/* Actions */}
                 <div className="pt-4 flex items-center justify-end">
-                  <button className="flex items-center space-x-2 bg-brand-indigo hover:bg-brand-violet text-white px-5 py-2 rounded-lg font-medium transition-colors shadow-sm">
-                    <span>Apply with BeyondResume</span>
-                    <ArrowRight className="w-4 h-4" />
+                  <button 
+                    onClick={() => handleApply(job.id)}
+                    disabled={appliedJobs.includes(job.id)}
+                    className={`flex items-center space-x-2 px-5 py-2 rounded-lg font-medium transition-colors shadow-sm ${
+                      appliedJobs.includes(job.id)
+                        ? "bg-success/10 text-success cursor-default"
+                        : "bg-brand-indigo hover:bg-brand-violet text-white"
+                    }`}
+                  >
+                    {appliedJobs.includes(job.id) ? (
+                      <>
+                        <CheckCircle2 className="w-4 h-4" />
+                        <span>Application Sent</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Apply with BeyondResume</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </>
+                    )}
                   </button>
                 </div>
               </div>

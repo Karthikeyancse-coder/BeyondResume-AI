@@ -26,10 +26,10 @@ export default function MobileNav() {
     if (user?.role === "CANDIDATE") {
       return [
         { href: "/dashboard", label: "Home", icon: Home },
+        { href: "/job", label: "Jobs", icon: Briefcase },
         { href: "/interview", label: "Interview", icon: Bot },
         { href: "/scores", label: "Scores", icon: BarChart2 },
         { href: "/roadmap", label: "Roadmap", icon: Map },
-        { href: "/job", label: "Jobs", icon: Briefcase },
       ];
     }
     if (user?.role === "RECRUITER") {

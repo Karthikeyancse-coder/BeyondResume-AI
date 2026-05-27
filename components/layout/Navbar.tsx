@@ -30,11 +30,10 @@ export default function Navbar() {
         ) : user?.role === "CANDIDATE" ? (
           <>
             <Link href="/dashboard" className="hover:text-brand-indigo transition-colors">Dashboard</Link>
-            <Link href="/upload" className="hover:text-brand-indigo transition-colors">Upload</Link>
+            <Link href="/job" className="hover:text-brand-indigo transition-colors">Jobs</Link>
             <Link href="/interview" className="hover:text-brand-indigo transition-colors">Interview</Link>
             <Link href="/scores" className="hover:text-brand-indigo transition-colors">Scores</Link>
             <Link href="/roadmap" className="hover:text-brand-indigo transition-colors">Roadmap</Link>
-            <Link href="/job" className="hover:text-brand-indigo transition-colors">Jobs</Link>
           </>
         ) : user?.role === "RECRUITER" ? (
           <>

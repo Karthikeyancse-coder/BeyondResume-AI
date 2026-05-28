@@ -23,7 +23,7 @@ Provide specific, actionable advice based on this context. Do not use markdown h
       messages,
     });
 
-    return result.toDataStreamResponse();
+    return result.toTextStreamResponse();
   } catch (error) {
     console.error("Roadmap Chat API Error:", error);
     return new Response("Internal Server Error", { status: 500 });

@@ -7,6 +7,7 @@ import { mockRoadmap } from "@/lib/mock-data";
 import { Map, AlertCircle, PlayCircle, Calendar, CheckSquare, Square } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import RoadmapChatbot from "@/components/roadmap/RoadmapChatbot";
 
 export default function RoadmapPage() {
   const [completedSkills, setCompletedSkills] = useState<string[]>([]);
@@ -174,6 +175,7 @@ export default function RoadmapPage() {
         </motion.div>
 
       </motion.div>
+      <RoadmapChatbot />
     </PageWrapper>
   );
 }

@@ -18,7 +18,7 @@ import CompanyVerifyForm from "@/components/auth/CompanyVerifyForm";
 
 function RegisterForm() {
   const [role, setRole] = useState<"CANDIDATE" | "RECRUITER">("CANDIDATE");
-  const { startRegistration, verifyOtp, resendOtp, submitCompanyVerification, registrationStep, setRegistrationStep, user } = useAuthStore();
+  const { startRegistration, verifyOtp, resendOtp, submitCompanyVerification, registrationStep, setRegistrationStep } = useAuthStore();
   const router = useRouter();
   const searchParams = useSearchParams();
 

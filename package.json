@@ -9,9 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ai-sdk/google": "^3.0.80",
+    "@ai-sdk/react": "^3.0.194",
+    "@google/genai": "^2.7.0",
     "@hookform/resolvers": "^5.4.0",
     "@prisma/client": "^5.22.0",
     "@react-pdf/renderer": "^4.5.1",
+    "ai": "^6.0.192",
     "axios": "^1.16.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.40.0",

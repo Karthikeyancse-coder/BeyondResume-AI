@@ -22,25 +22,25 @@ export default function Navbar() {
       <div className="flex items-center space-x-8 font-medium text-text-secondary text-sm">
         {!isAuthenticated ? (
           <>
-            <Link href="/" className="hover:text-brand-indigo transition-colors">Home</Link>
-            <Link href="/#features" className="hover:text-brand-indigo transition-colors">Features</Link>
-            <Link href="/#how-it-works" className="hover:text-brand-indigo transition-colors">How It Works</Link>
-            <Link href="/#pricing" className="hover:text-brand-indigo transition-colors">Pricing</Link>
+            <Link href="/" className="relative text-text-secondary hover:text-brand-indigo transition-colors after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-indigo after:transition-all after:duration-300 hover:after:w-full">Home</Link>
+            <Link href="/#features" className="relative text-text-secondary hover:text-brand-indigo transition-colors after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-indigo after:transition-all after:duration-300 hover:after:w-full">Features</Link>
+            <Link href="/#how-it-works" className="relative text-text-secondary hover:text-brand-indigo transition-colors after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-indigo after:transition-all after:duration-300 hover:after:w-full">How It Works</Link>
+            <Link href="/#pricing" className="relative text-text-secondary hover:text-brand-indigo transition-colors after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-indigo after:transition-all after:duration-300 hover:after:w-full">Pricing</Link>
           </>
         ) : user?.role === "CANDIDATE" ? (
           <>
-            <Link href="/dashboard" className="hover:text-brand-indigo transition-colors">Dashboard</Link>
-            <Link href="/job" className="hover:text-brand-indigo transition-colors">Jobs</Link>
-            <Link href="/interview" className="hover:text-brand-indigo transition-colors">Interview</Link>
-            <Link href="/scores" className="hover:text-brand-indigo transition-colors">Scores</Link>
-            <Link href="/roadmap" className="hover:text-brand-indigo transition-colors">Roadmap</Link>
+            <Link href="/dashboard" className="relative text-text-secondary hover:text-brand-indigo transition-colors after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-indigo after:transition-all after:duration-300 hover:after:w-full">Dashboard</Link>
+            <Link href="/job" className="relative text-text-secondary hover:text-brand-indigo transition-colors after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-indigo after:transition-all after:duration-300 hover:after:w-full">Jobs</Link>
+            <Link href="/interview" className="relative text-text-secondary hover:text-brand-indigo transition-colors after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-indigo after:transition-all after:duration-300 hover:after:w-full">Interview</Link>
+            <Link href="/scores" className="relative text-text-secondary hover:text-brand-indigo transition-colors after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-indigo after:transition-all after:duration-300 hover:after:w-full">Scores</Link>
+            <Link href="/roadmap" className="relative text-text-secondary hover:text-brand-indigo transition-colors after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-indigo after:transition-all after:duration-300 hover:after:w-full">Roadmap</Link>
           </>
         ) : user?.role === "RECRUITER" ? (
           <>
-            <Link href="/recruiter/dashboard" className="hover:text-brand-indigo transition-colors">Dashboard</Link>
-            <Link href="/recruiter/post-job" className="hover:text-brand-indigo transition-colors">Post Job</Link>
-            <Link href="/recruiter/candidates" className="hover:text-brand-indigo transition-colors">Candidates</Link>
-            <Link href="/recruiter/analytics" className="hover:text-brand-indigo transition-colors">Analytics</Link>
+            <Link href="/recruiter/dashboard" className="relative text-text-secondary hover:text-brand-indigo transition-colors after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-indigo after:transition-all after:duration-300 hover:after:w-full">Dashboard</Link>
+            <Link href="/recruiter/post-job" className="relative text-text-secondary hover:text-brand-indigo transition-colors after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-indigo after:transition-all after:duration-300 hover:after:w-full">Post Job</Link>
+            <Link href="/recruiter/candidates" className="relative text-text-secondary hover:text-brand-indigo transition-colors after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-indigo after:transition-all after:duration-300 hover:after:w-full">Candidates</Link>
+            <Link href="/recruiter/analytics" className="relative text-text-secondary hover:text-brand-indigo transition-colors after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-indigo after:transition-all after:duration-300 hover:after:w-full">Analytics</Link>
           </>
         ) : null}
       </div>

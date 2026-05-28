@@ -59,8 +59,6 @@ export default function VerifyCompanyPage() {
 
           {/* Form */}
           <CompanyVerifyForm
-            companyName={user?.companyName || "Your Company"}
-            companyDomain={user?.emailDomain || "company.com"}
             onSubmit={handleSubmit}
           />
         </motion.div>

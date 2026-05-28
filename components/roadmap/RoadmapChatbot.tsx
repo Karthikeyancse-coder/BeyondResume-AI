@@ -74,7 +74,7 @@ export default function RoadmapChatbot() {
 
             {/* Messages Area */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-bg-primary">
-              {messages.length === 0 && (
+              {(!messages || messages.length === 0) && (
                 <div className="text-center text-text-secondary mt-10">
                   <div className="w-12 h-12 rounded-full bg-brand-indigo/10 flex items-center justify-center mx-auto mb-3">
                     <Bot className="w-6 h-6 text-brand-indigo" />
@@ -84,7 +84,7 @@ export default function RoadmapChatbot() {
                 </div>
               )}
 
-              {messages.map((m) => (
+              {messages?.map((m: any) => (
                 <div
                   key={m.id}
                   className={cn(

@@ -11,13 +11,12 @@ export default function RoadmapChatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // We pass the context along with every request so the backend knows the user's roadmap state
   const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
     api: "/api/roadmap-chat",
     body: {
       context: mockRoadmap
     }
-  });
+  } as any) as any;
 
   // Auto-scroll to bottom of messages
   useEffect(() => {

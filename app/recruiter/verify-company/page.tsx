@@ -11,7 +11,7 @@ import { ArrowLeft, ShieldCheck } from "lucide-react";
 
 export default function VerifyCompanyPage() {
   const router = useRouter();
-  const { user, submitCompanyVerification } = useAuthStore();
+  const { submitCompanyVerification } = useAuthStore();
 
   const steps = [
     { label: "Account Created" },

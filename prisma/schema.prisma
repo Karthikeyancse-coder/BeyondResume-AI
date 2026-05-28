@@ -20,17 +20,38 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
+  // Verification
+  verificationStatus VerificationStatus @default(PENDING)
+  otpCode            String?
+  otpExpiresAt       DateTime?
+  otpAttempts        Int                @default(0)
+  otpVerified        Boolean            @default(false)
+
+  // Login Security
+  loginAttempts      Int                @default(0)
+  lockedUntil        DateTime?
+
+  // Candidate-specific
+  githubUrl          String?            @unique
+
   // Relations
   candidateProfile CandidateProfile?
   recruiterProfile RecruiterProfile?
   accounts         Account[]
   sessions         Session[]
+  securityEvents   SecurityEvent[]
 }
 
 enum Role {
   CANDIDATE
   RECRUITER
   ADMIN
+}
+
+enum VerificationStatus {
+  PENDING
+  VERIFIED
+  REJECTED
 }
 
 model CandidateProfile {
@@ -55,6 +76,7 @@ model CandidateProfile {
   interviews        Interview[]
   companyInterviews CompanyInterview[]
   roadmap           Roadmap?
+  profileViews      ProfileView[]
 }
 
 model RecruiterProfile {
@@ -65,8 +87,23 @@ model RecruiterProfile {
   companyName String
   companyUrl  String?
   
+  // Verification
+  verificationMethod  VerificationMethod?
+  linkedinUrl         String?
+  documentUrl         String?
+  rejectionReason     String?
+  submittedAt         DateTime?
+  verifiedAt          DateTime?
+
   // Relations
-  jobs        Job[]
+  jobs                Job[]
+  recruiterActivity   RecruiterActivity[]
+  profileViews        ProfileView[]
+}
+
+enum VerificationMethod {
+  LINKEDIN
+  DOCUMENT
 }
 
 model Job {
@@ -148,6 +185,43 @@ model Roadmap {
   missingSkills      Json     // Array of skills with priority
   recommendedProjects Json    // Array of project objects
   estimatedTime      String
+}
+
+// ── Trust & Verification Models ──
+
+model RecruiterActivity {
+  id                 String   @id @default(cuid())
+  recruiterId        String
+  recruiter          RecruiterProfile @relation(fields: [recruiterId], references: [id])
+  
+  action             String   // "resume_download", "profile_view", "contact_reveal"
+  candidateProfileId String?
+  ipAddress          String?
+  
+  createdAt          DateTime @default(now())
+}
+
+model ProfileView {
+  id                 String   @id @default(cuid())
+  candidateProfileId String
+  candidateProfile   CandidateProfile @relation(fields: [candidateProfileId], references: [id])
+  recruiterId        String
+  recruiter          RecruiterProfile @relation(fields: [recruiterId], references: [id])
+  
+  viewedAt           DateTime @default(now())
+  ipAddress          String?
+}
+
+model SecurityEvent {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  type        String   // "new_device_login", "failed_login_attempts", "account_locked", "otp_verified"
+  metadata    Json?    // { location, device, count, etc. }
+  resolved    Boolean  @default(false)
+  
+  createdAt   DateTime @default(now())
 }
 
 // NextAuth standard models

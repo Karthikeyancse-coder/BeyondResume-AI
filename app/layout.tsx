@@ -30,12 +30,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" data-theme="light">
-      <body className={`${syne.variable} ${dmSans.variable} font-body bg-bg-primary text-text-primary antialiased`}>
+      <body className={`${syne.variable} ${dmSans.variable} font-body bg-bg-primary text-text-primary antialiased overflow-x-hidden`}>
         <ThemeProvider>
           <div className="min-h-screen flex flex-col">
             <Navbar />
             <MobileHeader />
-            <main className="flex-grow pb-16 lg:pb-0 relative overflow-hidden">
+            <main className="flex-grow pb-16 lg:pb-0 relative">
               {children}
             </main>
             <MobileNav />

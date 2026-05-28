@@ -319,3 +319,88 @@ export const mockCompanyMCQQuestions = [
     correctAnswerIndex: 2
   }
 ];
+
+// 🔴 TODO: REPLACE → GET /api/candidates/profile (full detail)
+export const mockFullProfile = {
+  fullName:    "Arjun Mehta",
+  currentRole: "Senior Backend Engineer | Node.js & PostgreSQL Expert",
+  location:    "San Francisco, CA (Remote)",
+  email:       "arjun@example.com",
+  phone:       "+1 (555) 987-6543",
+  portfolioUrl:"arjunmehta.dev",
+  githubUrl:   "github.com/arjundev",
+  linkedinUrl: "linkedin.com/in/arjunmehta",
+  twitter:     "@arjundev",
+
+  professionalSummary: "Passionate backend engineer with 4+ years building scalable microservices and resilient APIs. I thrive in high-performance environments and love solving complex architectural challenges.",
+
+  careerHistory: [
+    {
+      title:    "Backend Engineer",
+      company:  "TechCorp",
+      period:   "2022 – Present",
+      description: "Lead migration from monolithic to microservices using Node.js and Docker. Reduced API latency by 40%."
+    },
+    {
+      title:    "Software Developer",
+      company:  "StartupX",
+      period:   "2020 – 2022",
+      description: "Developed core features for a fintech platform. Integrated payment gateways and maintained PostgreSQL databases."
+    }
+  ],
+
+  skills: [
+    { name: "Node.js",       level: "Expert" },
+    { name: "TypeScript",    level: "Advanced" },
+    { name: "PostgreSQL",    level: "Advanced" },
+    { name: "Docker",        level: "Proficient" },
+    { name: "AWS",           level: "Advanced" },
+    { name: "GraphQL",       level: "Proficient" },
+    { name: "System Design", level: "Advanced" },
+  ],
+
+  education: [
+    {
+      degree:  "B.Tech Computer Science",
+      school:  "University of Technology",
+      period:  "2016 – 2020",
+      gpa:     "3.8/4.0"
+    }
+  ],
+
+  projects: [
+    {
+      name:        "AI Verification Platform",
+      description: "Built a fully automated AI assessment system using Next.js and Python.",
+      tech:        ["Next.js", "Python", "TensorFlow"],
+      url:         "github.com/arjundev/ai-verify",
+      starred:     true
+    },
+    {
+      name:        "E-Commerce Microservices",
+      description: "Migrated legacy monolith to scalable Node.js microservices.",
+      tech:        ["Node.js", "Docker", "RabbitMQ"],
+      url:         "github.com/arjundev/ecom-ms",
+      starred:     false
+    }
+  ],
+
+  certifications: [
+    {
+      name:     "AWS Certified Solutions Architect",
+      issuer:   "Amazon Web Services",
+      date:     "Aug 2023",
+      credId:   "AWS-CSA-7829"
+    }
+  ],
+
+  languages: [
+    { name: "English", level: "Professional" },
+    { name: "Spanish", level: "Intermediate" },
+    { name: "Hindi",   level: "Advanced" }
+  ],
+
+  capabilityScore:   87,
+  authenticityScore: 91,
+  verifiedText:      "Profile verified via deep technical interviews and semantic code analysis. Top 15% in backend systems."
+};

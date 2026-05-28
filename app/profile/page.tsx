@@ -7,8 +7,9 @@ import { fadeUp, staggerContainer } from "@/lib/animations";
 import {
   LogOut, MapPin, Briefcase, GraduationCap, Link as LinkIcon, Award, Calendar, Edit3,
   Check, Trash2, Plus, Camera, ImagePlus, X, Save, FolderOpen, Heart, Globe, BrainCircuit, Code2, ShieldCheck,
-  ExternalLink, Image as ImageIcon, Mail, Phone, Trophy, BookOpen, Users, Star, FileText
+  ExternalLink, Image as ImageIcon, Mail, Phone, Trophy, BookOpen, Users, Star, FileText, Download
 } from "lucide-react";
+import RecruiterPreviewModal from "@/components/resume/RecruiterPreviewModal";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
@@ -167,6 +168,8 @@ export default function ProfilePage() {
     setShowAddMenu(false);
   };
 
+  const [isRecruiterModalOpen, setIsRecruiterModalOpen] = useState(false);
+
   if (!user) return null;
   const isCandidate = user.role === "CANDIDATE";
 
@@ -196,7 +199,9 @@ export default function ProfilePage() {
   const removeItem = <T,>(arr: T[], idx: number) => arr.filter((_, i) => i !== idx);
 
   return (
-    <PageWrapper className="min-h-screen bg-bg-primary pb-20">
+    <PageWrapper className="min-h-screen bg-bg-primary pb-20 lg:pb-0">
+      <RecruiterPreviewModal isOpen={isRecruiterModalOpen} onClose={() => setIsRecruiterModalOpen(false)} />
+      
       <input ref={avatarInputRef} type="file" accept="image/*" className="hidden" onChange={handleAvatarUpload} />
       <input ref={bannerInputRef} type="file" accept="image/*" className="hidden" onChange={handleBannerUpload} />
 
@@ -205,8 +210,8 @@ export default function ProfilePage() {
         {/* ═══════════ HEADER CARD ═══════════ */}
         <motion.div variants={fadeUp} initial="initial" animate="animate" className="bg-bg-secondary rounded-2xl shadow-sm border border-border-default overflow-hidden">
           {/* Banner */}
-          <div className="h-40 md:h-56 relative group cursor-pointer" onClick={() => bannerInputRef.current?.click()}>
-            {user.banner ? <img src={user.banner} alt="Banner" className="w-full h-full object-cover" /> : <div className="w-full h-full bg-brand-gradient" />}
+          <div className="h-32 sm:h-40 md:h-56 relative group cursor-pointer bg-black" onClick={() => bannerInputRef.current?.click()}>
+            {user.banner ? <img src={user.banner} alt="Banner" className="w-full h-full object-contain object-center" /> : <div className="w-full h-full bg-brand-gradient" />}
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center">
               <button className="bg-bg-secondary/40 backdrop-blur-md px-4 py-2 rounded-xl text-white font-bold text-sm opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2"><ImagePlus className="w-4 h-4" />Change Banner</button>
             </div>
@@ -215,18 +220,24 @@ export default function ProfilePage() {
           <div className="px-6 md:px-10 pb-8 relative group/info">
             {editingSection !== "info" && <button onClick={() => setEditingSection("info")} className="absolute top-4 right-4 p-2 rounded-lg text-text-muted hover:text-brand-indigo hover:bg-brand-indigo/10 transition-colors opacity-0 group-hover/info:opacity-100 z-20"><Edit3 className="w-5 h-5" /></button>}
 
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end -mt-16 md:-mt-24 mb-6 gap-4">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end -mt-12 md:-mt-24 mb-6 gap-4">
               {/* Avatar */}
-              <div className="w-32 h-32 md:w-40 md:h-40 rounded-[2rem] border-4 border-bg-secondary bg-bg-tertiary flex items-center justify-center shadow-lg overflow-hidden relative z-10 group cursor-pointer" onClick={() => avatarInputRef.current?.click()}>
-                {user.avatar ? <img src={user.avatar} alt="Avatar" className="w-full h-full object-cover" /> : <div className="w-full h-full bg-brand-gradient flex items-center justify-center text-white text-6xl font-bold">{user.name.charAt(0)}</div>}
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center"><Camera className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" /></div>
-                {isCandidate && <div className="absolute bottom-2 right-2 bg-bg-secondary p-1 rounded-xl shadow-md border border-border-default"><div className="bg-success/10 text-success flex items-center gap-1.5 px-2 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider"><ShieldCheck className="w-3 h-3" /><span>Verified</span></div></div>}
+              <div className="w-24 h-24 md:w-40 md:h-40 rounded-[2rem] border-4 border-bg-secondary bg-bg-tertiary flex items-center justify-center shadow-lg overflow-hidden relative z-10 group cursor-pointer shrink-0" onClick={() => avatarInputRef.current?.click()}>
+                {user.avatar ? <img src={user.avatar} alt="Avatar" className="w-full h-full object-cover" /> : <div className="w-full h-full bg-brand-gradient flex items-center justify-center text-white text-4xl md:text-6xl font-bold">{user.name.charAt(0)}</div>}
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center"><Camera className="w-6 h-6 md:w-8 md:h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" /></div>
               </div>
               {/* Buttons */}
-              <div className="flex items-center space-x-3 w-full md:w-auto mt-2 md:mt-0">
-                {editingSection === "info" && <button onClick={() => saveSection("info")} className="px-5 py-2.5 bg-brand-gradient text-white font-bold rounded-xl shadow-sm hover:shadow-glow transition-all flex items-center gap-2"><Save className="w-4 h-4" /> Save</button>}
-                <button onClick={() => setEditingSection("info")} className="px-5 py-2.5 bg-bg-tertiary text-text-primary hover:text-brand-indigo font-bold rounded-xl border border-border-default hover:border-brand-indigo transition-all flex items-center gap-2"><Edit3 className="w-4 h-4" /><span>Edit Profile</span></button>
-                <button onClick={handleSignOut} className="px-5 py-2.5 bg-transparent border-2 border-border-default text-text-primary hover:bg-bg-tertiary font-bold rounded-xl transition-all flex items-center gap-2"><LogOut className="w-4 h-4" /><span>Sign Out</span></button>
+              <div className="grid grid-cols-3 md:flex md:flex-wrap items-center gap-2 md:gap-3 w-full md:w-auto mt-4 md:mt-0">
+                {isCandidate ? (
+                  <>
+                    {editingSection === "info" && <button onClick={() => saveSection("info")} className="col-span-3 md:col-span-1 md:flex-none justify-center px-2 md:px-5 py-2 md:py-2.5 text-xs md:text-base bg-brand-gradient text-white font-bold rounded-xl shadow-sm hover:shadow-glow transition-all flex items-center gap-1.5 whitespace-nowrap"><Save className="w-4 h-4" /> Save</button>}
+                    <button onClick={() => router.push("/profile/resume-builder")} className="col-span-1 md:flex-none justify-center px-2 md:px-5 py-2 md:py-2.5 text-xs md:text-base bg-bg-secondary text-brand-indigo font-bold rounded-xl border border-brand-indigo/30 hover:border-brand-indigo hover:bg-brand-indigo/5 transition-all flex items-center gap-1.5 shadow-sm whitespace-nowrap"><FileText className="w-3.5 h-3.5 md:w-4 h-4" /><span>Resume</span></button>
+                    <button onClick={() => setEditingSection("info")} className="col-span-1 md:flex-none justify-center px-2 md:px-5 py-2 md:py-2.5 text-xs md:text-base bg-bg-tertiary text-text-primary hover:text-brand-indigo font-bold rounded-xl border border-border-default hover:border-brand-indigo transition-all flex items-center gap-1.5 whitespace-nowrap"><Edit3 className="w-3.5 h-3.5 md:w-4 h-4" /><span>Edit</span></button>
+                    <button onClick={handleSignOut} className="col-span-1 md:flex-none justify-center px-2 md:px-5 py-2 md:py-2.5 text-xs md:text-base bg-transparent border-2 border-border-default text-text-primary hover:bg-bg-tertiary font-bold rounded-xl transition-all flex items-center gap-1.5 whitespace-nowrap"><LogOut className="w-3.5 h-3.5 md:w-4 h-4" /><span>Sign Out</span></button>
+                  </>
+                ) : (
+                  <button onClick={() => setIsRecruiterModalOpen(true)} className="flex-1 md:flex-none justify-center px-4 md:px-6 py-2.5 bg-brand-gradient text-white font-bold rounded-xl shadow-md hover:shadow-glow hover:-translate-y-0.5 transition-all flex items-center gap-2"><Download className="w-4 h-4" /><span>Download Resume ↓</span></button>
+                )}
               </div>
             </div>
 
@@ -248,16 +259,26 @@ export default function ProfilePage() {
                 </div>
               ) : (
                 <>
-                  <h1 className="text-3xl md:text-4xl font-display font-bold text-text-primary flex items-center space-x-4">
-                    <span>{name}</span>
-                    <span className="text-[10px] font-bold uppercase tracking-widest bg-brand-indigo/10 text-brand-indigo px-3 py-1 rounded-md">{user.role}</span>
-                  </h1>
-                  <p className="text-lg text-text-secondary mt-1 font-medium">{headline}</p>
-                  <div className="flex flex-wrap items-center gap-3 text-sm text-text-muted mt-5">
-                    <span className="flex items-center gap-1.5 bg-bg-tertiary px-3 py-1.5 rounded-lg border border-border-subtle"><MapPin className="w-4 h-4 text-brand-cyan" />{location}</span>
-                    {contact.email && <span className="flex items-center gap-1.5 bg-bg-tertiary px-3 py-1.5 rounded-lg border border-border-subtle"><Mail className="w-4 h-4 text-brand-violet" />{contact.email}</span>}
-                    {contact.phone && <span className="flex items-center gap-1.5 bg-bg-tertiary px-3 py-1.5 rounded-lg border border-border-subtle"><Phone className="w-4 h-4 text-success" />{contact.phone}</span>}
-                    {contact.website && <a href={`https://${contact.website}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 bg-bg-tertiary px-3 py-1.5 rounded-lg border border-border-subtle hover:text-brand-indigo transition-colors"><Globe className="w-4 h-4 text-brand-indigo" />{contact.website}</a>}
+                  <div className="flex flex-wrap items-center gap-2 md:gap-3 mb-1">
+                    <h1 className="text-2xl md:text-4xl font-display font-bold text-text-primary">
+                      {name}
+                    </h1>
+                    {isCandidate && (
+                      <span className="bg-success/10 text-success flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider border border-success/20">
+                        <ShieldCheck className="w-3 h-3" />
+                        Verified
+                      </span>
+                    )}
+                    <span className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest bg-brand-indigo/10 text-brand-indigo px-2 md:px-3 py-1 rounded-md shrink-0 border border-brand-indigo/20">
+                      {user.role}
+                    </span>
+                  </div>
+                  <p className="text-sm md:text-lg text-text-secondary mt-1 md:mt-2 font-medium">{headline}</p>
+                  <div className="flex flex-wrap items-center gap-2 md:gap-3 text-xs md:text-sm text-text-muted mt-4 md:mt-5">
+                    <span className="flex items-center gap-1 md:gap-1.5 bg-bg-tertiary px-2 md:px-3 py-1.5 rounded-lg border border-border-subtle"><MapPin className="w-3.5 h-3.5 md:w-4 md:h-4 text-brand-cyan" />{location}</span>
+                    {contact.email && <span className="flex items-center gap-1 md:gap-1.5 bg-bg-tertiary px-2 md:px-3 py-1.5 rounded-lg border border-border-subtle"><Mail className="w-3.5 h-3.5 md:w-4 md:h-4 text-brand-violet" />{contact.email}</span>}
+                    {contact.phone && <span className="flex items-center gap-1 md:gap-1.5 bg-bg-tertiary px-2 md:px-3 py-1.5 rounded-lg border border-border-subtle"><Phone className="w-3.5 h-3.5 md:w-4 md:h-4 text-success" />{contact.phone}</span>}
+                    {contact.website && <a href={`https://${contact.website}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 md:gap-1.5 bg-bg-tertiary px-2 md:px-3 py-1.5 rounded-lg border border-border-subtle hover:text-brand-indigo transition-colors"><Globe className="w-3.5 h-3.5 md:w-4 md:h-4 text-brand-indigo" />{contact.website}</a>}
                   </div>
                   {/* Social Links */}
                   <div className="flex items-center gap-3 mt-3">

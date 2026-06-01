@@ -12,7 +12,7 @@ interface SelectionModalProps {
   onClose: () => void;
 }
 
-export default function SelectionModal({ candidateName, candidateId, isOpen, onClose }: SelectionModalProps) {
+export default function SelectionModal({ candidateName, isOpen, onClose }: SelectionModalProps) {
   const router = useRouter();
   const [selectedJob, setSelectedJob] = useState("");
   const [message, setMessage] = useState(`Hi ${candidateName.split(' ')[0]},\n\nWe reviewed your profile and were extremely impressed by your technical skills and project portfolio. We would love to move forward with you for this role.\n\nAre you available for a brief introductory call this week?`);

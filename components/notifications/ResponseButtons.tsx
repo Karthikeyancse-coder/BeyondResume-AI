@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { MessageCircle, Check, X, HelpCircle } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Check, X, HelpCircle } from "lucide-react";
 
 interface ResponseButtonsProps {
   onAccept: () => void;

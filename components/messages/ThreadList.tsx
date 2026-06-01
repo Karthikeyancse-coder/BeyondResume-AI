@@ -6,7 +6,16 @@ import { formatDistanceToNow } from "date-fns";
 import { cn } from "@/lib/utils";
 
 interface ThreadListProps {
-  threads: any[];
+  threads: {
+    threadId: string;
+    company: string;
+    recruiter: string;
+    jobTitle: string;
+    stage: string;
+    unreadCount: number;
+    lastMessage: string;
+    lastMessageTime: string;
+  }[];
   activeThreadId?: string;
   baseUrl: string;
 }

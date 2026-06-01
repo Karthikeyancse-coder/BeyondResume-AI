@@ -7,13 +7,12 @@ import PageWrapper from "@/components/layout/PageWrapper";
 import NotificationCard from "@/components/notifications/NotificationCard";
 import { mockNotifications } from "@/lib/mock-data";
 import { Notification, NotificationType } from "@/components/notifications/notification-types";
-import { useAuthStore } from "@/store/useAuthStore";
 
 type FilterType = 'All' | 'Unread' | 'Jobs' | 'Messages' | 'System';
 
 export default function NotificationsPage() {
   const [filter, setFilter] = useState<FilterType>('All');
-  const [notifications, setNotifications] = useState<Notification[]>(
+  const [notifications] = useState<Notification[]>(
     mockNotifications.map(n => ({...n, type: n.type as NotificationType}))
   );
 
@@ -67,7 +66,7 @@ export default function NotificationsPage() {
               <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center mx-auto mb-4">
                 <Bell className="w-10 h-10 text-text-muted" />
               </div>
-              <h3 className="text-xl font-semibold text-text-primary mb-2">You're all caught up!</h3>
+              <h3 className="text-xl font-semibold text-text-primary mb-2">You&apos;re all caught up!</h3>
               <p className="text-text-secondary">No {filter !== 'All' ? filter.toLowerCase() : ''} notifications to display right now.</p>
             </motion.div>
           ) : (

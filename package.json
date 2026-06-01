@@ -19,6 +19,7 @@
     "axios": "^1.16.1",
     "canvas-confetti": "^1.9.4",
     "clsx": "^2.1.1",
+    "date-fns": "^4.4.0",
     "framer-motion": "^12.40.0",
     "lucide-react": "^1.16.0",
     "next": "14.2.35",
@@ -27,6 +28,7 @@
     "react-dom": "^18",
     "react-hook-form": "^7.76.1",
     "recharts": "^3.8.1",
+    "sonner": "^2.0.7",
     "tailwind-merge": "^3.6.0",
     "zod": "^4.4.3",
     "zustand": "^5.0.13"

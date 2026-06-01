@@ -29,7 +29,7 @@ export default function NotificationCard({ notification }: NotificationCardProps
     // 🔴 TODO: REPLACE WITH API CALL → POST /api/candidates/respond-selection { response: 'accept' }
   };
 
-  const handleDecline = (reason?: string) => {
+  const handleDecline = () => {
     setStatus('declined');
     toast.success("Response sent. Good luck with your search!");
     // 🔴 TODO: REPLACE WITH API CALL → POST /api/candidates/respond-selection { response: 'decline', reason }
@@ -79,7 +79,7 @@ export default function NotificationCard({ notification }: NotificationCardProps
             <div className="bg-bg-primary/50 border border-white/5 rounded-lg p-4 mb-4 relative">
               <div className="absolute top-4 left-0 w-1 h-full bg-brand-indigo/30 -ml-px rounded-r" />
               <p className="text-text-secondary text-sm italic">
-                "{notification.message || notification.preview}"
+                &quot;{notification.message || notification.preview}&quot;
               </p>
             </div>
           )}

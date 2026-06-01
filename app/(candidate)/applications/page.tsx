@@ -4,16 +4,16 @@ import { useState } from "react";
 import PageWrapper from "@/components/layout/PageWrapper";
 import HiredCelebration from "@/components/candidate/HiredCelebration";
 import { mockApplications } from "@/lib/mock-data";
-import { Briefcase, Building2, MessageCircle, ExternalLink, ShieldCheck } from "lucide-react";
+import { Briefcase, MessageCircle, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import StageTracker from "@/components/messages/StageTracker";
-import { cn } from "@/lib/utils";
+// removed cn import
 
 export default function ApplicationsPage() {
   const [showCelebration, setShowCelebration] = useState(false);
   const [celebrationData, setCelebrationData] = useState({ company: "", role: "" });
 
-  const handleSimulateHired = (app: any) => {
+  const handleSimulateHired = (app: { company: string, jobTitle: string }) => {
     setCelebrationData({ company: app.company, role: app.jobTitle });
     setShowCelebration(true);
   };
@@ -28,7 +28,7 @@ export default function ApplicationsPage() {
             <Briefcase className="w-8 h-8 text-brand-indigo" />
             My Applications
           </h1>
-          <p className="text-text-secondary">Track the progress of roles you've been selected for.</p>
+          <p className="text-text-secondary">Track the progress of roles you&apos;ve been selected for.</p>
         </div>
 
         {/* List */}
@@ -96,7 +96,7 @@ export default function ApplicationsPage() {
                     </div>
                     <div>
                       <p className="text-sm font-medium text-text-primary mb-0.5">{app.recruiter}</p>
-                      <p className="text-sm text-text-secondary line-clamp-2 italic">"{app.lastMessage}"</p>
+                      <p className="text-sm text-text-secondary line-clamp-2 italic">&quot;{app.lastMessage}&quot;</p>
                       <p className="text-[10px] text-text-tertiary mt-2">{app.lastMessageTime}</p>
                     </div>
                   </div>

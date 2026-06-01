@@ -8,7 +8,14 @@ import { format } from "date-fns";
 
 interface ChatWindowProps {
   threadId: string;
-  messages: any[];
+  messages: {
+    id: string;
+    sender: string;
+    senderName?: string;
+    content: string;
+    createdAt: string;
+    read?: boolean;
+  }[];
   title: string;
   subtitle: string;
   isVerified?: boolean;
@@ -19,7 +26,7 @@ interface ChatWindowProps {
 }
 
 export default function ChatWindow({ 
-  threadId, messages, title, subtitle, isVerified, stage, backHref, onSendMessage, currentUserId 
+  messages, title, subtitle, isVerified, stage, backHref, onSendMessage, currentUserId 
 }: ChatWindowProps) {
   const [inputValue, setInputValue] = useState("");
   const endOfMessagesRef = useRef<HTMLDivElement>(null);
@@ -37,7 +44,14 @@ export default function ChatWindow({
   };
 
   // Group messages by day
-  const groupedMessages: { [date: string]: any[] } = {};
+  const groupedMessages: { [date: string]: {
+    id: string;
+    sender: string;
+    senderName?: string;
+    content: string;
+    createdAt: string;
+    read?: boolean;
+  }[] } = {};
   messages.forEach(msg => {
     const date = format(new Date(msg.createdAt), "MMM d, yyyy");
     if (!groupedMessages[date]) groupedMessages[date] = [];
@@ -57,7 +71,9 @@ export default function ChatWindow({
             <div className="flex items-center gap-2">
               <h2 className="font-semibold text-text-primary">{title}</h2>
               {isVerified && (
-                <CheckCircle2 className="w-4 h-4 text-brand-cyan" title="Verified Company" />
+                <span title="Verified Company">
+                  <CheckCircle2 className="w-4 h-4 text-brand-cyan" />
+                </span>
               )}
             </div>
             <p className="text-xs text-text-secondary">{subtitle}</p>

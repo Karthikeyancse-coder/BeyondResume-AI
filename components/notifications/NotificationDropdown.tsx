@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
-import { Check, MessageCircle, X } from "lucide-react";
+import { Check, MessageCircle } from "lucide-react";
 import { NOTIFICATION_TYPES, Notification } from "./notification-types";
 import { cn } from "@/lib/utils";
 
@@ -81,7 +81,7 @@ export default function NotificationDropdown({ notifications, isOpen, onClose, o
                             
                             {(notification.message || notification.preview) && (
                               <p className="text-xs text-text-secondary mt-1 line-clamp-2">
-                                "{notification.message || notification.preview}"
+                                &quot;{notification.message || notification.preview}&quot;
                               </p>
                             )}
                             

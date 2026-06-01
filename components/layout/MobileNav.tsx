@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useAuthStore } from "@/store/useAuthStore";
 import { 
   Home, Sparkles, Lightbulb, LogIn, Rocket,
-  Bot, BarChart2, Map, PlusSquare, Users, Settings, Briefcase, Bell
+  Bot, Map, PlusSquare, Users, Briefcase, Bell
 } from "lucide-react";
 import { mockNotifications } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";

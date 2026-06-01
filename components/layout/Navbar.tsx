@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useAuthStore } from "@/store/useAuthStore";
 import ThemeToggle from "@/components/shared/ThemeToggle";
-import { Bell, BrainCircuit } from "lucide-react";
+import { BrainCircuit } from "lucide-react";
+import NotificationBell from "@/components/notifications/NotificationBell";
 
 export default function Navbar() {
   const { user, isAuthenticated } = useAuthStore();
@@ -60,10 +61,7 @@ export default function Navbar() {
           </>
         ) : (
           <>
-            <button className="text-text-muted hover:text-brand-indigo transition-colors p-2 relative">
-              <Bell className="w-5 h-5" />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-danger rounded-full border border-bg-secondary"></span>
-            </button>
+            <NotificationBell />
             <Link href="/profile" className="flex items-center space-x-2 p-1 rounded-md hover:bg-bg-tertiary transition-colors">
               <div className="w-8 h-8 rounded-full overflow-hidden bg-brand-gradient flex items-center justify-center text-white font-bold text-sm">
                 {user?.avatar ? (

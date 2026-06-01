@@ -5,13 +5,15 @@ import { usePathname } from "next/navigation";
 import { useAuthStore } from "@/store/useAuthStore";
 import { 
   Home, Sparkles, Lightbulb, LogIn, Rocket,
-  Bot, BarChart2, Map, PlusSquare, Users, Settings, Briefcase
+  Bot, BarChart2, Map, PlusSquare, Users, Settings, Briefcase, Bell
 } from "lucide-react";
+import { mockNotifications } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
 
 export default function MobileNav() {
   const { user, isAuthenticated } = useAuthStore();
   const pathname = usePathname();
+  const unreadCount = mockNotifications.filter(n => !n.read).length;
 
   const getLinks = () => {
     if (!isAuthenticated) {
@@ -28,7 +30,7 @@ export default function MobileNav() {
         { href: "/dashboard", label: "Home", icon: Home },
         { href: "/job", label: "Jobs", icon: Briefcase },
         { href: "/interview", label: "Interview", icon: Bot },
-        { href: "/scores", label: "Scores", icon: BarChart2 },
+        { href: "/notifications", label: "Alerts", icon: Bell },
         { href: "/roadmap", label: "Roadmap", icon: Map },
       ];
     }
@@ -37,8 +39,7 @@ export default function MobileNav() {
         { href: "/recruiter/dashboard", label: "Home", icon: Home },
         { href: "/recruiter/post-job", label: "Post Job", icon: PlusSquare },
         { href: "/recruiter/candidates", label: "Candidates", icon: Users },
-        { href: "/recruiter/analytics", label: "Analytics", icon: BarChart2 },
-        { href: "/recruiter/dashboard", label: "Settings", icon: Settings },
+        { href: "/notifications", label: "Alerts", icon: Bell },
       ];
     }
     return [];
@@ -58,11 +59,18 @@ export default function MobileNav() {
               <Link 
                 href={link.href}
                 className={cn(
-                  "flex flex-col items-center justify-center w-full h-full space-y-1 text-text-muted hover:text-brand-indigo transition-colors",
+                  "flex flex-col items-center justify-center w-full h-full space-y-1 text-text-muted hover:text-brand-indigo transition-colors relative",
                   isActive && "text-brand-indigo font-medium"
                 )}
               >
-                <Icon className="w-5 h-5" />
+                <div className="relative">
+                  <Icon className="w-5 h-5" />
+                  {link.icon === Bell && unreadCount > 0 && (
+                    <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-error-red text-white text-[8px] font-bold rounded-full flex items-center justify-center border border-bg-secondary">
+                      {unreadCount > 9 ? '9+' : unreadCount}
+                    </span>
+                  )}
+                </div>
                 <span className="text-[10px]">{link.label}</span>
               </Link>
             </li>

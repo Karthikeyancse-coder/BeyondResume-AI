@@ -7,8 +7,9 @@ import { fadeUp, staggerContainer } from "@/lib/animations";
 import { mockCandidatesForRecruiter } from "@/lib/mock-data";
 import {
   Search, Star, Download, X, AlertTriangle, CheckCircle2,
-  ShieldCheck, FileText, Save, Send
+  ShieldCheck, FileText, Save, CheckCircle
 } from "lucide-react";
+import SelectionModal from "@/components/recruiter/SelectionModal";
 import { cn } from "@/lib/utils";
 import {
   Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
@@ -26,6 +27,7 @@ export default function CandidatesPage() {
   const [shortlisted, setShortlisted] = useState<Set<string>>(new Set(["c1"]));
   const [notes, setNotes] = useState<Record<string, string>>({});
   const [currentNote, setCurrentNote] = useState("");
+  const [isSelectionModalOpen, setIsSelectionModalOpen] = useState(false);
 
   const candidates = mockCandidatesForRecruiter
     .filter(c => {
@@ -221,8 +223,8 @@ export default function CandidatesPage() {
                     <button className="flex-1 py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 bg-bg-tertiary text-text-primary border border-border-default hover:border-brand-indigo transition-all">
                       <Download className="w-4 h-4" />Resume
                     </button>
-                    <button className="flex-1 py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 bg-brand-gradient text-white shadow-sm hover:shadow-glow transition-all">
-                      <Send className="w-4 h-4" />Interview
+                    <button onClick={() => setIsSelectionModalOpen(true)} className="flex-1 py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 bg-brand-gradient text-white shadow-sm hover:shadow-glow transition-all">
+                      <CheckCircle className="w-4 h-4" />Select for Role
                     </button>
                   </div>
                 </div>
@@ -347,6 +349,15 @@ export default function CandidatesPage() {
             )}
           </AnimatePresence>
         </div>
+        
+        {selected && (
+          <SelectionModal 
+            isOpen={isSelectionModalOpen}
+            onClose={() => setIsSelectionModalOpen(false)}
+            candidateId={selected.id}
+            candidateName={selected.name}
+          />
+        )}
       </motion.div>
     </PageWrapper>
   );

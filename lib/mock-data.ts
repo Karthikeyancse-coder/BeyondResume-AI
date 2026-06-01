@@ -404,3 +404,132 @@ export const mockFullProfile = {
   authenticityScore: 91,
   verifiedText:      "Profile verified via deep technical interviews and semantic code analysis. Top 15% in backend systems."
 };
+
+// 🔴 TODO: REPLACE → GET /api/candidates/notifications
+export const mockNotifications = [
+  {
+    id:        "notif_001",
+    type:      "SELECTED",
+    read:      false,
+    createdAt: "2025-05-22T10:30:00Z",
+    company:   "TechCorp Solutions",
+    recruiter: "Sarah Connor",
+    jobTitle:  "Backend Engineer",
+    message:   "Hi Arjun! We reviewed your profile and were impressed by your backend expertise.",
+    nextSteps: "We'll schedule a call within 2 business days.",
+    threadId:  "thread_001",
+  },
+  {
+    id:        "notif_002",
+    type:      "NEW_MESSAGE",
+    read:      false,
+    createdAt: "2025-05-22T10:45:00Z",
+    company:   "TechCorp Solutions",
+    recruiter: "Sarah Connor",
+    preview:   "When are you available for a call?",
+    threadId:  "thread_001",
+  },
+  {
+    id:        "notif_003",
+    type:      "OFFER_EXTENDED",
+    read:      true,
+    createdAt: "2025-05-20T14:00:00Z",
+    company:   "StartupX",
+    recruiter: "HR Team",
+    jobTitle:  "Full Stack Developer",
+    threadId:  "thread_002",
+  },
+]
+
+// 🔴 TODO: REPLACE → GET /api/candidates/applications
+export const mockApplications = [
+  {
+    id:         "app_001",
+    jobTitle:   "Backend Engineer",
+    company:    "TechCorp Solutions",
+    companyVerified: true,
+    stage:      "selected",  // selected | offer | hired | declined
+    selectedAt: "2025-05-22",
+    offerAt:    null,
+    hiredAt:    null,
+    finalScore: 82,
+    recruiter:  "Sarah Connor",
+    threadId:   "thread_001",
+    lastMessage:"When are you available?",
+    lastMessageTime: "2h ago",
+  },
+  {
+    id:         "app_002",
+    jobTitle:   "Full Stack Developer",
+    company:    "StartupX",
+    companyVerified: true,
+    stage:      "offer",
+    selectedAt: "2025-05-18",
+    offerAt:    "2025-05-20",
+    hiredAt:    null,
+    finalScore: 79,
+    recruiter:  "HR Team",
+    threadId:   "thread_002",
+    lastMessage:"Please review the offer details.",
+    lastMessageTime: "1d ago",
+  },
+]
+
+// 🔴 TODO: REPLACE → GET /api/messages/threads
+export const mockMessageThreads = [
+  {
+    threadId:    "thread_001",
+    company:     "TechCorp Solutions",
+    recruiter:   "Sarah Connor",
+    jobTitle:    "Backend Engineer",
+    stage:       "selected",
+    unreadCount: 2,
+    lastMessage: "When are you available for a call?",
+    lastMessageTime: "2025-05-22T10:45:00Z",
+  },
+]
+
+// 🔴 TODO: REPLACE → GET /api/messages/:threadId
+export const mockMessages = [
+  {
+    id:        "msg_001",
+    threadId:  "thread_001",
+    sender:    "recruiter",
+    senderName:"Sarah Connor",
+    content:   "Hi Arjun! We reviewed your profile and were impressed by your backend expertise. We'd love to move forward with you for the Backend Engineer role.",
+    createdAt: "2025-05-22T10:30:00Z",
+    read:      true,
+  },
+  {
+    id:        "msg_002",
+    threadId:  "thread_001",
+    sender:    "candidate",
+    content:   "Hi Sarah! I'm excited about this opportunity and happy to move forward. Looking forward to connecting!",
+    createdAt: "2025-05-22T10:32:00Z",
+    read:      true,
+  },
+  {
+    id:        "msg_003",
+    threadId:  "thread_001",
+    sender:    "recruiter",
+    senderName:"Sarah Connor",
+    content:   "Great! When are you available for a 30-minute call this week?",
+    createdAt: "2025-05-22T10:45:00Z",
+    read:      false,
+  },
+]
+
+// 🔴 TODO: REPLACE → GET /api/recruiter/pipeline
+export const mockPipeline = {
+  jobTitle: "Backend Engineer",
+  selected: [
+    { id:"c1", name:"Arjun Mehta",  score:82, daysInStage:1 },
+    { id:"c2", name:"Sara Lin",     score:65, daysInStage:2 },
+  ],
+  offer: [
+    { id:"c3", name:"Rahul Dev",    score:73, daysInStage:4 },
+  ],
+  hired: [
+    { id:"c4", name:"Priya Sharma", score:80, daysInStage:0 },
+  ],
+};

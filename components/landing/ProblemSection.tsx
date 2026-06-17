@@ -39,7 +39,7 @@ export default function ProblemSection() {
               Modern Hiring is <span className="text-red-500">Broken</span>
             </motion.h2>
             <motion.p variants={fadeUp} className="text-white/60 max-w-2xl mx-auto text-lg">
-              Most companies rely on static, easily faked PDF resumes. It's chaotic, unverified, and deeply biased.
+              Most companies rely on static, easily faked PDF resumes. It&apos;s chaotic, unverified, and deeply biased.
             </motion.p>
           </div>
 

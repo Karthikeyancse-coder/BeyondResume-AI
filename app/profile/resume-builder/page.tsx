@@ -18,9 +18,16 @@ export default function ResumeBuilderPage() {
   const { user, isAuthenticated } = useAuthStore();
   const router = useRouter();
 
-  const [selectedTemplate, setSelectedTemplate] = useState<TemplateName>("classic");
-  const [enabledSections, setEnabledSections] = useState<EnabledSections>(defaultEnabledSections);
+  const profileState = useProfileStore();
+
+  const [selectedTemplate, setSelectedTemplate] = useState<TemplateName>(
+    (profileState.resumeConfig?.template as TemplateName) || "classic"
+  );
+  const [enabledSections, setEnabledSections] = useState<EnabledSections>(
+    (profileState.resumeConfig?.enabledSections as EnabledSections) || defaultEnabledSections
+  );
   const [isDownloading, setIsDownloading] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [activeTab, setActiveTab] = useState<"settings" | "preview">("settings");
 
   useEffect(() => {
@@ -34,14 +41,26 @@ export default function ResumeBuilderPage() {
     }
   }, [isAuthenticated, user, router]);
 
-  const profileState = useProfileStore();
-
   if (!user || user.role === "RECRUITER") return null;
 
   const resumeData = getResumeData(profileState);
 
   const toggleSection = (key: keyof EnabledSections) => {
     setEnabledSections(prev => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const handleUpload = () => {
+    setIsUploading(true);
+    profileState.updateProfile({
+      resumeConfig: {
+        template: selectedTemplate,
+        enabledSections,
+      }
+    });
+    setTimeout(() => {
+      setIsUploading(false);
+      alert("Resume successfully uploaded to your profile!");
+    }, 600);
   };
 
   const handleDownload = async () => {
@@ -199,7 +218,7 @@ export default function ResumeBuilderPage() {
               </div>
             </div>
 
-            {/* Download Actions */}
+            {/* Download and Upload Actions */}
             <div className="pt-4 space-y-3 pb-8">
               <button
                 onClick={() => setActiveTab("preview")}
@@ -207,6 +226,24 @@ export default function ResumeBuilderPage() {
               >
                 <Eye className="w-5 h-5" /> View Full Screen Preview
               </button>
+              
+              <button
+                onClick={handleUpload}
+                disabled={isUploading}
+                className="w-full flex items-center justify-center gap-2 py-4 bg-brand-indigo/10 text-brand-indigo rounded-xl font-bold hover:bg-brand-indigo/20 transition-all disabled:opacity-70 border border-brand-indigo/20"
+              >
+                {isUploading ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-brand-indigo/30 border-t-brand-indigo rounded-full animate-spin" />
+                    Uploading...
+                  </>
+                ) : (
+                  <>
+                    <ShieldCheck className="w-5 h-5" /> Upload to Profile
+                  </>
+                )}
+              </button>
+
               <button
                 onClick={handleDownload}
                 disabled={isDownloading}
@@ -223,7 +260,8 @@ export default function ResumeBuilderPage() {
                   </>
                 )}
               </button>
-              <div className="flex items-center justify-center gap-2 text-[11px] text-text-muted font-medium">
+              
+              <div className="flex items-center justify-center gap-2 text-[11px] text-text-muted font-medium pt-1">
                 <FileText className="w-3.5 h-3.5" /> PDF Format <span className="w-1 h-1 bg-border-default rounded-full mx-1" /> A4 Size <span className="w-1 h-1 bg-border-default rounded-full mx-1" /> ATS-Friendly
               </div>
             </div>

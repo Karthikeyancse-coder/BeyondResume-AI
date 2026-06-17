@@ -34,6 +34,10 @@ export interface ProfileState {
   publications: PublicationItem[];
   interests: string[];
   customSections: CustomSection[];
+  resumeConfig?: {
+    template: string;
+    enabledSections: Record<string, boolean>;
+  };
   
   updateProfile: (data: Partial<ProfileState>) => void;
 }

@@ -16,19 +16,22 @@ interface RecruiterPreviewModalProps {
 }
 
 export default function RecruiterPreviewModal({ isOpen, onClose }: RecruiterPreviewModalProps) {
-  const [selectedTemplate, setSelectedTemplate] = useState<TemplateName>("modern");
+  const profileState = useProfileStore();
+  const resumeData = getResumeData(profileState);
+
+  const [selectedTemplate, setSelectedTemplate] = useState<TemplateName>(
+    (profileState.resumeConfig?.template as TemplateName) || "modern"
+  );
   
-  // Recruiters have everything enabled by default, including AI Scores.
-  const [enabledSections, setEnabledSections] = useState<EnabledSections>({
-    ...defaultEnabledSections,
-    aiScores: true,
-  });
+  // Recruiters see the candidate's custom uploaded sections if they exist, but always see aiScores
+  const [enabledSections, setEnabledSections] = useState<EnabledSections>(
+    profileState.resumeConfig?.enabledSections 
+      ? { ...defaultEnabledSections, ...profileState.resumeConfig.enabledSections, aiScores: true } 
+      : { ...defaultEnabledSections, aiScores: true }
+  );
 
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadSuccess, setDownloadSuccess] = useState(false);
-
-  const profileState = useProfileStore();
-  const resumeData = getResumeData(profileState);
 
   const handleDownload = async () => {
     setIsDownloading(true);

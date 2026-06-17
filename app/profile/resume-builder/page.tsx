@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Download, FileText, Settings, Eye, ShieldCheck } from "lucide-react";
+import { ArrowLeft, Download, FileText, Settings, Eye, ShieldCheck, AlertTriangle, X } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
 import PageWrapper from "@/components/layout/PageWrapper";
 import TemplateCard, { type TemplateName } from "@/components/resume/TemplateCard";
@@ -29,6 +29,7 @@ export default function ResumeBuilderPage() {
   );
   const [isDownloading, setIsDownloading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"settings" | "preview">("settings");
 
   useEffect(() => {
@@ -52,6 +53,7 @@ export default function ResumeBuilderPage() {
 
   const handleUpload = () => {
     setIsUploading(true);
+    setIsConfirmModalOpen(false);
     profileState.updateProfile({
       resumeConfig: {
         template: selectedTemplate,
@@ -229,7 +231,7 @@ export default function ResumeBuilderPage() {
               </button>
               
               <button
-                onClick={handleUpload}
+                onClick={() => setIsConfirmModalOpen(true)}
                 disabled={isUploading}
                 className="w-full flex items-center justify-center gap-2 py-4 bg-brand-indigo/10 text-brand-indigo rounded-xl font-bold hover:bg-brand-indigo/20 transition-all disabled:opacity-70 border border-brand-indigo/20"
               >
@@ -283,6 +285,55 @@ export default function ResumeBuilderPage() {
         </div>
 
       </div>
+
+      {/* Confirmation Modal */}
+      <AnimatePresence>
+        {isConfirmModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsConfirmModalOpen(false)}
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
+              className="relative w-full max-w-md bg-bg-primary rounded-3xl shadow-2xl border border-border-default overflow-hidden z-10"
+            >
+              <div className="p-6 md:p-8 text-center space-y-4">
+                <div className="w-16 h-16 bg-brand-indigo/10 rounded-full flex items-center justify-center mx-auto mb-2">
+                  <ShieldCheck className="w-8 h-8 text-brand-indigo" />
+                </div>
+                <h3 className="font-display font-bold text-2xl text-text-primary">
+                  Update Public Resume?
+                </h3>
+                <p className="text-text-secondary leading-relaxed text-sm">
+                  This will update your profile with the current template and sections. Recruiters will see this exact version when they view or download your resume.
+                </p>
+                
+                <div className="flex items-center gap-3 pt-6 mt-2 border-t border-border-subtle">
+                  <button
+                    onClick={() => setIsConfirmModalOpen(false)}
+                    className="flex-1 py-3 px-4 font-bold text-text-secondary hover:text-text-primary bg-bg-secondary hover:bg-bg-tertiary rounded-xl transition-colors border border-border-default"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleUpload}
+                    className="flex-1 py-3 px-4 font-bold text-white bg-brand-gradient hover:shadow-glow hover:-translate-y-0.5 rounded-xl transition-all shadow-md"
+                  >
+                    Yes, Update
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
     </PageWrapper>
   );
 }

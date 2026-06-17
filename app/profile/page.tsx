@@ -208,16 +208,12 @@ export default function ProfilePage() {
               </div>
               {/* Buttons */}
               <div className="grid grid-cols-3 md:flex md:flex-wrap items-center gap-2 md:gap-3 w-full md:w-auto mt-4 md:mt-0">
-                {isCandidate ? (
-                  <>
-                    {editingSection === "info" && <button onClick={() => saveSection("info")} className="col-span-3 md:col-span-1 md:flex-none justify-center px-2 md:px-5 py-2 md:py-2.5 text-xs md:text-base bg-brand-gradient text-white font-bold rounded-xl shadow-sm hover:shadow-glow transition-all flex items-center gap-1.5 whitespace-nowrap"><Save className="w-4 h-4" /> Save</button>}
-                    <button onClick={() => router.push("/profile/resume-builder")} className="col-span-1 md:flex-none justify-center px-2 md:px-5 py-2 md:py-2.5 text-xs md:text-base bg-bg-secondary text-brand-indigo font-bold rounded-xl border border-brand-indigo/30 hover:border-brand-indigo hover:bg-brand-indigo/5 transition-all flex items-center gap-1.5 shadow-sm whitespace-nowrap"><FileText className="w-3.5 h-3.5 md:w-4 h-4" /><span>Resume</span></button>
-                    <button onClick={() => setEditingSection("info")} className="col-span-1 md:flex-none justify-center px-2 md:px-5 py-2 md:py-2.5 text-xs md:text-base bg-bg-tertiary text-text-primary hover:text-brand-indigo font-bold rounded-xl border border-border-default hover:border-brand-indigo transition-all flex items-center gap-1.5 whitespace-nowrap"><Edit3 className="w-3.5 h-3.5 md:w-4 h-4" /><span>Edit</span></button>
-                    <button onClick={handleSignOut} className="col-span-1 md:flex-none justify-center px-2 md:px-5 py-2 md:py-2.5 text-xs md:text-base bg-transparent border-2 border-border-default text-text-primary hover:bg-bg-tertiary font-bold rounded-xl transition-all flex items-center gap-1.5 whitespace-nowrap"><LogOut className="w-3.5 h-3.5 md:w-4 h-4" /><span>Sign Out</span></button>
-                  </>
-                ) : (
-                  <button onClick={() => setIsRecruiterModalOpen(true)} className="flex-1 md:flex-none justify-center px-4 md:px-6 py-2.5 bg-brand-gradient text-white font-bold rounded-xl shadow-md hover:shadow-glow hover:-translate-y-0.5 transition-all flex items-center gap-2"><Download className="w-4 h-4" /><span>Download Resume ↓</span></button>
-                )}
+                {editingSection === "info" && <button onClick={() => saveSection("info")} className="col-span-3 md:col-span-1 md:flex-none justify-center px-2 md:px-5 py-2 md:py-2.5 text-xs md:text-base bg-brand-gradient text-white font-bold rounded-xl shadow-sm hover:shadow-glow transition-all flex items-center gap-1.5 whitespace-nowrap"><Save className="w-4 h-4" /> Save</button>}
+                <button onClick={() => router.push("/profile/resume-builder")} className="col-span-1 md:flex-none justify-center px-2 md:px-5 py-2 md:py-2.5 text-xs md:text-base bg-bg-secondary text-brand-indigo font-bold rounded-xl border border-brand-indigo/30 hover:border-brand-indigo hover:bg-brand-indigo/5 transition-all flex items-center gap-1.5 shadow-sm whitespace-nowrap"><FileText className="w-3.5 h-3.5 md:w-4 h-4" /><span>Resume</span></button>
+                <button onClick={() => setEditingSection("info")} className="col-span-1 md:flex-none justify-center px-2 md:px-5 py-2 md:py-2.5 text-xs md:text-base bg-bg-tertiary text-text-primary hover:text-brand-indigo font-bold rounded-xl border border-border-default hover:border-brand-indigo transition-all flex items-center gap-1.5 whitespace-nowrap"><Edit3 className="w-3.5 h-3.5 md:w-4 h-4" /><span>Edit</span></button>
+                <button onClick={handleSignOut} className="col-span-1 md:flex-none justify-center px-2 md:px-5 py-2 md:py-2.5 text-xs md:text-base bg-transparent border-2 border-border-default text-text-primary hover:bg-bg-tertiary font-bold rounded-xl transition-all flex items-center gap-1.5 whitespace-nowrap"><LogOut className="w-3.5 h-3.5 md:w-4 h-4" /><span>Sign Out</span></button>
+                
+                {/* For recruiters viewing a candidate, we might show a download button, but since they edit their own profile here, we can put the recruiter download modal trigger somewhere else or just hide it since this is their profile. */}
               </div>
             </div>
 
@@ -243,10 +239,15 @@ export default function ProfilePage() {
                     <h1 className="text-2xl md:text-4xl font-display font-bold text-text-primary">
                       {name}
                     </h1>
-                    {isCandidate && (
+                    {isCandidate ? (
                       <span className="bg-success/10 text-success flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider border border-success/20">
                         <ShieldCheck className="w-3 h-3" />
                         Verified
+                      </span>
+                    ) : (
+                      <span className="bg-brand-indigo/10 text-brand-indigo flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider border border-brand-indigo/20">
+                        <ShieldCheck className="w-3 h-3" />
+                        Verified Recruiter
                       </span>
                     )}
                     <span className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest bg-brand-indigo/10 text-brand-indigo px-2 md:px-3 py-1 rounded-md shrink-0 border border-brand-indigo/20">

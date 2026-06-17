@@ -8,7 +8,7 @@ import { fadeUp, staggerContainer } from "@/lib/animations";
 import {
   LogOut, MapPin, Briefcase, GraduationCap, Link as LinkIcon, Award, Calendar, Edit3,
   Check, Trash2, Plus, Camera, ImagePlus, X, Save, FolderOpen, Heart, Globe, BrainCircuit, Code2, ShieldCheck,
-  ExternalLink, Image as ImageIcon, Mail, Phone, Trophy, BookOpen, Users, Star, FileText, Download, Building
+  ExternalLink, Image as ImageIcon, Mail, Phone, Trophy, BookOpen, Users, Star, FileText, Building
 } from "lucide-react";
 import RecruiterPreviewModal from "@/components/resume/RecruiterPreviewModal";
 import { useRouter } from "next/navigation";
@@ -299,7 +299,7 @@ export default function ProfilePage() {
                                     </button>
                                   ))}
                                   {companyName && POPULAR_COMPANIES.filter(c => c.name.toLowerCase().includes(companyName.toLowerCase())).length === 0 && (
-                                    <div className="px-3 py-2 text-sm text-text-muted">Press enter to add "{companyName}"</div>
+                                    <div className="px-3 py-2 text-sm text-text-muted">Press enter to add &quot;{companyName}&quot;</div>
                                   )}
                                 </motion.div>
                               )}

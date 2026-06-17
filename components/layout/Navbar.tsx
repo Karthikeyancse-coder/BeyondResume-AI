@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useAuthStore } from "@/store/useAuthStore";
 import ThemeToggle from "@/components/shared/ThemeToggle";
 import { BrainCircuit } from "lucide-react";
-import NotificationBell from "@/components/notifications/NotificationBell";
 
 export default function Navbar() {
   const { user, isAuthenticated } = useAuthStore();

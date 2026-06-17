@@ -39,7 +39,7 @@ export default function FeaturesSection() {
   ];
 
   return (
-    <section id="features" className="py-24 bg-bg-primary">
+    <section id="features" className="py-24 bg-[#0A0A0F] border-t border-white/5 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
         <motion.div
           initial="initial"
@@ -47,28 +47,30 @@ export default function FeaturesSection() {
           viewport={{ once: true, margin: "-100px" }}
           variants={staggerContainer}
         >
-          <div className="text-center mb-16">
-            <motion.h2 variants={fadeUp} className="font-display font-bold text-3xl md:text-4xl text-text-primary mb-4">
-              Intelligence Features
+          <div className="text-center mb-16 relative z-10">
+            <motion.p variants={fadeUp} className="text-xs font-bold tracking-[0.2em] text-brand-indigo mb-4 uppercase">Platform Features</motion.p>
+            <motion.h2 variants={fadeUp} className="font-display font-bold text-4xl md:text-5xl text-white mb-6 tracking-tight">
+              What It Can Do?
             </motion.h2>
-            <motion.p variants={fadeUp} className="text-text-secondary max-w-2xl mx-auto">
+            <motion.p variants={fadeUp} className="text-white/60 max-w-2xl mx-auto text-lg">
               Everything you need to prove your capability, powered by advanced AI reasoning.
             </motion.p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
             {features.map((feat, i) => (
               <motion.div
                 key={i}
                 variants={fadeUp}
                 whileHover={{ scale: 1.02, y: -4 }}
-                className="flex flex-col p-6 rounded-2xl bg-bg-secondary border border-border-subtle shadow-sm hover:shadow-md transition-all"
+                className="flex flex-col p-8 rounded-2xl bg-[#111116] border border-white/5 shadow-xl hover:shadow-2xl hover:border-brand-indigo/30 transition-all group relative overflow-hidden"
               >
-                <div className="w-12 h-12 rounded-lg bg-brand-indigo/10 flex items-center justify-center mb-4">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-indigo/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="w-12 h-12 rounded-xl bg-brand-indigo/10 flex items-center justify-center mb-6 border border-brand-indigo/20 group-hover:scale-110 transition-transform">
                   {feat.icon}
                 </div>
-                <h3 className="font-bold text-lg text-text-primary mb-2">{feat.title}</h3>
-                <p className="text-sm text-text-secondary">{feat.desc}</p>
+                <h3 className="font-bold text-lg text-white mb-3">{feat.title}</h3>
+                <p className="text-sm text-white/50 leading-relaxed">{feat.desc}</p>
               </motion.div>
             ))}
           </div>

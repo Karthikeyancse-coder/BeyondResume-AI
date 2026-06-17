@@ -101,6 +101,15 @@ BeyondResume AI is built on a modern, robust, and scalable foundation:
    ```bash
    npm run dev
    ```
+
+---
+
+## 👨‍💻 Created By
+**SK (Karthikeyan)**
+- GitHub: [@Karthikeyancse-coder](https://github.com/Karthikeyancse-coder)
+
+---
+
 5. **Open the App**:
    Navigate to [http://localhost:3000](http://localhost:3000)
 

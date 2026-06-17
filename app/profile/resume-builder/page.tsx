@@ -11,6 +11,7 @@ import PreviewPanel from "@/components/resume/PreviewPanel";
 import SectionToggle from "@/components/resume/SectionToggle";
 import { generateResumePDF } from "@/lib/pdf-generator";
 import { getResumeData, defaultEnabledSections, type EnabledSections } from "@/lib/resume-data-mapper";
+import { useProfileStore } from "@/store/useProfileStore";
 import { cn } from "@/lib/utils";
 
 export default function ResumeBuilderPage() {
@@ -33,9 +34,11 @@ export default function ResumeBuilderPage() {
     }
   }, [isAuthenticated, user, router]);
 
+  const profileState = useProfileStore();
+
   if (!user || user.role === "RECRUITER") return null;
 
-  const resumeData = getResumeData();
+  const resumeData = getResumeData(profileState);
 
   const toggleSection = (key: keyof EnabledSections) => {
     setEnabledSections(prev => ({ ...prev, [key]: !prev[key] }));

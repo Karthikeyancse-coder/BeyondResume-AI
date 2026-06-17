@@ -8,6 +8,7 @@ import PreviewPanel from "./PreviewPanel";
 import SectionToggle from "./SectionToggle";
 import { generateResumePDF } from "@/lib/pdf-generator";
 import { getResumeData, defaultEnabledSections, type EnabledSections } from "@/lib/resume-data-mapper";
+import { useProfileStore } from "@/store/useProfileStore";
 
 interface RecruiterPreviewModalProps {
   isOpen: boolean;
@@ -26,7 +27,8 @@ export default function RecruiterPreviewModal({ isOpen, onClose }: RecruiterPrev
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadSuccess, setDownloadSuccess] = useState(false);
 
-  const resumeData = getResumeData();
+  const profileState = useProfileStore();
+  const resumeData = getResumeData(profileState);
 
   const handleDownload = async () => {
     setIsDownloading(true);

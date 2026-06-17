@@ -1,7 +1,7 @@
 // /lib/resume-data-mapper.ts
 // 🔴 TODO: REPLACE mockFullProfile → GET /api/candidates/profile
 
-import { mockFullProfile } from "./mock-data";
+import type { ProfileState, ExperienceItem, EducationItem, SkillItem, ProjectItem, CertItem, LanguageItem } from "@/store/useProfileStore";
 
 /* ── Types ── */
 export interface CareerEntry {
@@ -92,29 +92,55 @@ export const defaultEnabledSections: EnabledSections = {
   aiScores: false, // Default OFF for candidates
 };
 
-export function getResumeData(): ResumeData {
-  const p = mockFullProfile;
+export function getResumeData(p: ProfileState): ResumeData {
   return {
-    name: p.fullName,
-    role: p.currentRole,
+    name: p.name,
+    role: p.headline,
     location: p.location,
-    email: p.email,
-    phone: p.phone,
-    website: p.portfolioUrl,
-    github: p.githubUrl,
-    linkedin: p.linkedinUrl,
+    email: p.contact.email,
+    phone: p.contact.phone,
+    website: p.contact.website,
+    github: p.contact.github,
+    linkedin: p.contact.linkedin,
 
-    summary: p.professionalSummary,
-    experience: p.careerHistory,
-    skills: p.skills,
-    education: p.education,
-    projects: p.projects,
-    certifications: p.certifications,
-    languages: p.languages,
+    summary: p.about,
+    experience: p.experience.map((e: ExperienceItem) => ({
+      title: e.role,
+      company: e.company,
+      period: e.duration,
+      description: e.desc
+    })),
+    skills: p.skills.map((s: SkillItem) => ({
+      name: s.name,
+      level: s.level === 5 ? "Expert" : s.level === 4 ? "Advanced" : s.level === 3 ? "Proficient" : "Basic"
+    })),
+    education: p.education.map((e: EducationItem) => ({
+      degree: e.degree + " " + e.field,
+      school: e.school,
+      period: e.year,
+      gpa: e.gpa
+    })),
+    projects: p.projects.map((pr: ProjectItem) => ({
+      name: pr.name,
+      description: pr.desc,
+      tech: pr.tech.split(",").map((t: string) => t.trim()),
+      url: pr.link,
+      starred: pr.isPinned
+    })),
+    certifications: p.certifications.map((c: CertItem) => ({
+      name: c.name,
+      issuer: c.issuer,
+      date: c.date,
+      credId: c.credentialId
+    })),
+    languages: p.languages.map((l: LanguageItem) => ({
+      name: l.name,
+      level: l.proficiency === 5 ? "Professional" : l.proficiency === 4 ? "Advanced" : l.proficiency === 3 ? "Intermediate" : "Basic"
+    })),
     aiScores: {
-      capability: p.capabilityScore,
-      authenticity: p.authenticityScore,
-      verifiedText: p.verifiedText,
+      capability: 87, // Mocked for now
+      authenticity: 91,
+      verifiedText: "Profile verified via deep technical interviews and semantic code analysis. Top 15% in backend systems."
     },
   };
 }

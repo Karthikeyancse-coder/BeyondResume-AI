@@ -1,6 +1,7 @@
 "use client";
 
 import { useAuthStore } from "@/store/useAuthStore";
+import { useProfileStore } from "@/store/useProfileStore";
 import PageWrapper from "@/components/layout/PageWrapper";
 import { motion, AnimatePresence } from "framer-motion";
 import { fadeUp, staggerContainer } from "@/lib/animations";
@@ -32,6 +33,28 @@ interface ContactInfo {
   github: string; linkedin: string; twitter: string;
 }
 
+const SectionWrapper = ({ id, title, icon, children, removable, editingSection, onSave, onEdit, onRemove }: { id: string; title: string; icon?: React.ReactNode; children: React.ReactNode; removable?: boolean; editingSection: string | null; onSave: (id: string) => void; onEdit: (id: string) => void; onRemove: (id: string) => void; }) => (
+  <motion.div variants={fadeUp} className="bg-bg-secondary p-6 md:p-8 rounded-3xl shadow-sm border border-border-default group/section relative">
+    <div className="flex items-center justify-between mb-6">
+      <h2 className="text-xl font-display font-bold text-text-primary flex items-center gap-3">
+        {icon && <span className="text-brand-indigo">{icon}</span>}
+        {title}
+      </h2>
+      <div className="flex items-center gap-2">
+        {editingSection === id ? (
+          <button onClick={() => onSave(id)} className="p-2 rounded-lg bg-success/10 text-success hover:bg-success/20 transition-colors" title="Save"><Check className="w-4 h-4" /></button>
+        ) : (
+          <button onClick={() => onEdit(id)} className="p-2 rounded-lg text-text-muted hover:text-brand-indigo hover:bg-brand-indigo/10 transition-colors opacity-0 group-hover/section:opacity-100" title="Edit"><Edit3 className="w-4 h-4" /></button>
+        )}
+        {removable && (
+          <button onClick={() => onRemove(id)} className="p-2 rounded-lg text-text-muted hover:text-danger hover:bg-danger/10 transition-colors opacity-0 group-hover/section:opacity-100" title="Remove"><Trash2 className="w-4 h-4" /></button>
+        )}
+      </div>
+    </div>
+    <div>{children}</div>
+  </motion.div>
+);
+
 export default function ProfilePage() {
   const { user, isAuthenticated, logout, updateUser } = useAuthStore();
   const router = useRouter();
@@ -41,50 +64,53 @@ export default function ProfilePage() {
 
   const [editingSection, setEditingSection] = useState<string | null>(null);
 
+  const profile = useProfileStore();
+  const updateProfile = useProfileStore((state) => state.updateProfile);
+
   // Header
-  const [name, setName] = useState("");
-  const [headline, setHeadline] = useState("");
-  const [location, setLocation] = useState("");
+  const [name, setName] = useState(profile.name);
+  const [headline, setHeadline] = useState(profile.headline);
+  const [location, setLocation] = useState(profile.location);
 
   // Contact
-  const [contact, setContact] = useState<ContactInfo>({ email: "", phone: "", website: "", github: "", linkedin: "", twitter: "" });
+  const [contact, setContact] = useState<ContactInfo>(profile.contact);
 
   // About
-  const [about, setAbout] = useState("");
+  const [about, setAbout] = useState(profile.about);
 
   // Experience
-  const [experience, setExperience] = useState<ExperienceItem[]>([]);
+  const [experience, setExperience] = useState<ExperienceItem[]>(profile.experience);
 
   // Education
-  const [education, setEducation] = useState<EducationItem[]>([]);
+  const [education, setEducation] = useState<EducationItem[]>(profile.education);
 
   // Skills
-  const [skills, setSkills] = useState<SkillItem[]>([]);
+  const [skills, setSkills] = useState<SkillItem[]>(profile.skills);
 
   // Projects
-  const [projects, setProjects] = useState<ProjectItem[]>([]);
+  const [projects, setProjects] = useState<ProjectItem[]>(profile.projects);
 
   // Certifications
-  const [certifications, setCertifications] = useState<CertItem[]>([]);
+  const [certifications, setCertifications] = useState<CertItem[]>(profile.certifications);
 
   // Languages
-  const [languages, setLanguages] = useState<LanguageItem[]>([]);
+  const [languages, setLanguages] = useState<LanguageItem[]>(profile.languages);
 
   // Awards
-  const [awards, setAwards] = useState<AwardItem[]>([]);
+  const [awards, setAwards] = useState<AwardItem[]>(profile.awards);
 
   // Volunteer
-  const [volunteer, setVolunteer] = useState<VolunteerItem[]>([]);
+  const [volunteer, setVolunteer] = useState<VolunteerItem[]>(profile.volunteer);
 
   // Publications
-  const [publications, setPublications] = useState<PublicationItem[]>([]);
+  const [publications, setPublications] = useState<PublicationItem[]>(profile.publications);
 
   // Interests
-  const [interests, setInterests] = useState<string[]>([]);
+  const [interests, setInterests] = useState<string[]>(profile.interests);
   const [newInterest, setNewInterest] = useState("");
 
   // Custom Sections
-  const [customSections, setCustomSections] = useState<CustomSection[]>([]);
+  const [customSections, setCustomSections] = useState<CustomSection[]>(profile.customSections);
   const [showAddMenu, setShowAddMenu] = useState(false);
 
   // Sections visibility
@@ -100,42 +126,12 @@ export default function ProfilePage() {
   useEffect(() => {
     if (!isAuthenticated) { router.push("/login"); return; }
     if (!user) return;
-    const isCand = user.role === "CANDIDATE";
-    setName(user.name);
-    setHeadline(isCand ? "Senior Backend Engineer | Node.js & PostgreSQL Expert" : "Technical Recruiter at TechCorp Inc.");
-    setLocation("San Francisco, CA (Remote)");
-    setContact({ email: user.email, phone: "+1 (555) 987-6543", website: "arjunmehta.dev", github: "github.com/arjundev", linkedin: "linkedin.com/in/arjunmehta", twitter: "@arjundev" });
-    setAbout(isCand
-      ? "Passionate backend engineer with 4+ years of experience building scalable microservices and resilient APIs. I thrive in high-performance environments and love solving complex architectural challenges. Always learning, currently diving deep into Kubernetes and distributed systems."
-      : "Dedicated technical recruiter focused on finding and nurturing top engineering talent. I believe in skills over resumes and use data-driven insights to make fair, equitable hiring decisions.");
-    setExperience(isCand ? [
-      { role: "Backend Engineer", company: "TechCorp", duration: "2022 - Present", desc: "Lead the migration from a monolithic architecture to microservices using Node.js and Docker. Reduced API latency by 40%." },
-      { role: "Software Developer", company: "StartupX", duration: "2020 - 2022", desc: "Developed core features for a fintech platform. Integrated third-party payment gateways and maintained PostgreSQL databases." }
-    ] : [
-      { role: "Senior Technical Recruiter", company: "TechCorp", duration: "2021 - Present", desc: "Managing end-to-end engineering hiring. Implemented skills-first assessment platforms." }
-    ]);
-    setEducation([
-      { school: "University of Technology", degree: "Bachelor of Science", field: "Computer Science", year: "2016 - 2020", gpa: "3.8 / 4.0" }
-    ]);
-    setSkills(isCand
-      ? [{ name: "Node.js", level: 5 }, { name: "TypeScript", level: 4 }, { name: "PostgreSQL", level: 4 }, { name: "Docker", level: 3 }, { name: "AWS", level: 4 }, { name: "GraphQL", level: 3 }, { name: "System Design", level: 4 }]
-      : [{ name: "Technical Sourcing", level: 5 }, { name: "Interviewing", level: 4 }, { name: "Negotiation", level: 4 }, { name: "DEI", level: 3 }]);
-    if (isCand) {
-      setProjects([
-        { id: "1", name: "AI Verification Platform", desc: "Built a fully automated AI assessment system using Next.js and Python for analyzing developer capabilities.", tech: "Next.js, Python, TensorFlow", link: "github.com/example/ai-verify", isPinned: true },
-        { id: "2", name: "E-Commerce Microservices", desc: "Migrated a legacy monolith to a scalable Node.js microservices architecture with event-driven patterns.", tech: "Node.js, Docker, RabbitMQ", link: "github.com/example/ecom", isPinned: false }
-      ]);
-      setCertifications([
-        { id: "1", name: "AWS Certified Solutions Architect", issuer: "Amazon Web Services", date: "Aug 2023", credentialId: "AWS-CSA-7829", image: "" }
-      ]);
-      setLanguages([
-        { id: "1", name: "English", proficiency: 5 },
-        { id: "2", name: "Spanish", proficiency: 3 },
-        { id: "3", name: "Hindi", proficiency: 4 }
-      ]);
-      setInterests(["Open Source", "Distributed Systems", "Rock Climbing", "Chess"]);
+    
+    // Only override name if it's the initial load with mock data but real user
+    if (user.name && name === "Arjun Mehta" && user.name !== "Arjun Mehta") {
+      setName(user.name);
     }
-  }, [isAuthenticated, user, router]);
+  }, [isAuthenticated, user, router, name]);
 
   const handleSignOut = () => { logout(); router.push("/"); };
 
@@ -157,9 +153,20 @@ export default function ProfilePage() {
     reader.onloadend = () => setCertifications(certifications.map(c => c.id === id ? { ...c, image: reader.result as string } : c));
     reader.readAsDataURL(file);
   };
+  const handleAwardImageUpload = (id: string, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]; if (!file) return;
+    const reader = new FileReader();
+    reader.onloadend = () => setAwards(awards.map(a => a.id === id ? { ...a, image: reader.result as string } : a));
+    reader.readAsDataURL(file);
+  };
 
   const saveSection = (section: string) => {
     if (section === "info") updateUser({ name });
+    
+    updateProfile({
+      name, headline, location, contact, about, experience, education, skills, projects, certifications, languages, awards, volunteer, publications, interests, customSections
+    });
+    
     setEditingSection(null);
   };
 
@@ -168,33 +175,22 @@ export default function ProfilePage() {
     setShowAddMenu(false);
   };
 
+  const handleRemoveSection = (key: string) => {
+    if (key.startsWith("custom-")) {
+      const customId = key.replace("custom-", "");
+      setCustomSections(prev => prev.filter(s => s.id !== customId));
+    } else {
+      toggleSection(key);
+    }
+  };
+
   const [isRecruiterModalOpen, setIsRecruiterModalOpen] = useState(false);
 
   if (!user) return null;
   const isCandidate = user.role === "CANDIDATE";
 
   /* ── Section Wrapper ── */
-  const Section = ({ id, title, icon, children, removable }: { id: string; title: string; icon?: React.ReactNode; children: React.ReactNode; removable?: boolean }) => (
-    <motion.div variants={fadeUp} className="bg-bg-secondary p-6 md:p-8 rounded-3xl shadow-sm border border-border-default group/section relative">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-display font-bold text-text-primary flex items-center gap-3">
-          {icon && <span className="text-brand-indigo">{icon}</span>}
-          {title}
-        </h2>
-        <div className="flex items-center gap-2">
-          {editingSection === id ? (
-            <button onClick={() => saveSection(id)} className="p-2 rounded-lg bg-success/10 text-success hover:bg-success/20 transition-colors" title="Save"><Check className="w-4 h-4" /></button>
-          ) : (
-            <button onClick={() => setEditingSection(id)} className="p-2 rounded-lg text-text-muted hover:text-brand-indigo hover:bg-brand-indigo/10 transition-colors opacity-0 group-hover/section:opacity-100" title="Edit"><Edit3 className="w-4 h-4" /></button>
-          )}
-          {removable && (
-            <button onClick={() => toggleSection(id)} className="p-2 rounded-lg text-text-muted hover:text-danger hover:bg-danger/10 transition-colors opacity-0 group-hover/section:opacity-100" title="Remove"><Trash2 className="w-4 h-4" /></button>
-          )}
-        </div>
-      </div>
-      <div>{children}</div>
-    </motion.div>
-  );
+  
 
   const removeItem = <T,>(arr: T[], idx: number) => arr.filter((_, i) => i !== idx);
 
@@ -321,7 +317,7 @@ export default function ProfilePage() {
 
             {/* Skills with Proficiency Bars */}
             {visibleSections.skills && (
-              <Section id="skills" title="Skills" icon={<Code2 className="w-6 h-6" />}>
+              <SectionWrapper editingSection={editingSection} onSave={saveSection} onEdit={setEditingSection} onRemove={toggleSection} id="skills" title="Skills" icon={<Code2 className="w-6 h-6" />}>
                 <div className="space-y-4">
                   {skills.map((skill, i) => (
                     <div key={i} className="relative group/skill">
@@ -350,12 +346,12 @@ export default function ProfilePage() {
                     <button onClick={() => setSkills([...skills, { name: "New Skill", level: 1 }])} className="w-full py-2 border-2 border-dashed border-border-default rounded-xl text-sm font-bold text-text-muted hover:text-brand-indigo hover:border-brand-indigo transition-colors flex items-center justify-center gap-2"><Plus className="w-4 h-4" />Add Skill</button>
                   )}
                 </div>
-              </Section>
+              </SectionWrapper>
             )}
 
             {/* Languages */}
             {visibleSections.languages && (
-              <Section id="languages" title="Languages" icon={<Globe className="w-6 h-6" />} removable>
+              <SectionWrapper editingSection={editingSection} onSave={saveSection} onEdit={setEditingSection} onRemove={toggleSection} id="languages" title="Languages" icon={<Globe className="w-6 h-6" />} removable>
                 <div className="space-y-5">
                   {languages.map((lang, i) => (
                     <div key={lang.id}>
@@ -387,12 +383,12 @@ export default function ProfilePage() {
                     <button onClick={() => setLanguages([...languages, { id: Date.now().toString(), name: "New Language", proficiency: 1 }])} className="w-full py-2 border-2 border-dashed border-border-default rounded-xl text-sm font-bold text-text-muted hover:text-brand-indigo hover:border-brand-indigo transition-colors flex items-center justify-center gap-2"><Plus className="w-4 h-4" />Add Language</button>
                   )}
                 </div>
-              </Section>
+              </SectionWrapper>
             )}
 
             {/* Interests */}
             {visibleSections.interests && (
-              <Section id="interests" title="Interests" icon={<Heart className="w-6 h-6" />} removable>
+              <SectionWrapper editingSection={editingSection} onSave={saveSection} onEdit={setEditingSection} onRemove={toggleSection} id="interests" title="Interests" icon={<Heart className="w-6 h-6" />} removable>
                 <div className="flex flex-wrap gap-2.5">
                   {interests.map((item, i) => (
                     <span key={i} className="relative group/tag px-4 py-2 bg-bg-primary text-text-primary border border-border-default rounded-xl text-sm font-bold shadow-sm">
@@ -407,7 +403,7 @@ export default function ProfilePage() {
                     </form>
                   )}
                 </div>
-              </Section>
+              </SectionWrapper>
             )}
 
             {/* Profile Details */}
@@ -453,7 +449,7 @@ export default function ProfilePage() {
 
             {/* Career History */}
             {visibleSections.experience && (
-              <Section id="experience" title="Career History" icon={<Briefcase className="w-6 h-6" />}>
+              <SectionWrapper editingSection={editingSection} onSave={saveSection} onEdit={setEditingSection} onRemove={toggleSection} id="experience" title="Career History" icon={<Briefcase className="w-6 h-6" />}>
                 <div className="space-y-6">
                   {experience.map((exp, i) => (
                     <div key={i} className="flex gap-4">
@@ -480,12 +476,12 @@ export default function ProfilePage() {
                   ))}
                   {editingSection === "experience" && <button onClick={() => setExperience([...experience, { role: "", company: "", duration: "", desc: "" }])} className="w-full py-3 border-2 border-dashed border-border-default rounded-xl text-sm font-bold text-text-muted hover:text-brand-indigo hover:border-brand-indigo transition-colors flex items-center justify-center gap-2"><Plus className="w-4 h-4" />Add Experience</button>}
                 </div>
-              </Section>
+              </SectionWrapper>
             )}
 
             {/* Education */}
             {visibleSections.education && (
-              <Section id="education" title="Education" icon={<GraduationCap className="w-6 h-6" />}>
+              <SectionWrapper editingSection={editingSection} onSave={saveSection} onEdit={setEditingSection} onRemove={toggleSection} id="education" title="Education" icon={<GraduationCap className="w-6 h-6" />}>
                 <div className="space-y-6">
                   {education.map((edu, i) => (
                     <div key={i} className="flex gap-4">
@@ -515,12 +511,12 @@ export default function ProfilePage() {
                   ))}
                   {editingSection === "education" && <button onClick={() => setEducation([...education, { school: "", degree: "", field: "", year: "", gpa: "" }])} className="w-full py-3 border-2 border-dashed border-border-default rounded-xl text-sm font-bold text-text-muted hover:text-brand-indigo hover:border-brand-indigo transition-colors flex items-center justify-center gap-2"><Plus className="w-4 h-4" />Add Education</button>}
                 </div>
-              </Section>
+              </SectionWrapper>
             )}
 
             {/* Projects */}
             {visibleSections.projects && (
-              <Section id="projects" title="Projects" icon={<FolderOpen className="w-6 h-6" />} removable>
+              <SectionWrapper editingSection={editingSection} onSave={saveSection} onEdit={setEditingSection} onRemove={toggleSection} id="projects" title="Projects" icon={<FolderOpen className="w-6 h-6" />} removable>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {projects.map((proj, i) => (
                     <div key={proj.id} className={cn("bg-bg-primary p-6 rounded-2xl border transition-colors relative", proj.isPinned ? "border-brand-indigo/30 shadow-md" : "border-border-default")}>
@@ -550,12 +546,12 @@ export default function ProfilePage() {
                   ))}
                   {editingSection === "projects" && <button onClick={() => setProjects([...projects, { id: Date.now().toString(), name: "", desc: "", tech: "", link: "", isPinned: false }])} className="min-h-[160px] border-2 border-dashed border-border-default rounded-2xl flex flex-col items-center justify-center gap-2 text-text-muted hover:text-brand-indigo hover:border-brand-indigo transition-colors hover:bg-brand-indigo/5"><Plus className="w-6 h-6" /><span className="font-bold text-sm">Add Project</span></button>}
                 </div>
-              </Section>
+              </SectionWrapper>
             )}
 
             {/* Certifications */}
             {visibleSections.certifications && (
-              <Section id="certifications" title="Certifications" icon={<Award className="w-6 h-6" />} removable>
+              <SectionWrapper editingSection={editingSection} onSave={saveSection} onEdit={setEditingSection} onRemove={toggleSection} id="certifications" title="Certifications" icon={<Award className="w-6 h-6" />} removable>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {certifications.map((cert, i) => (
                     <div key={cert.id} className="bg-bg-primary p-4 rounded-2xl border border-border-default flex gap-4">
@@ -590,41 +586,51 @@ export default function ProfilePage() {
                   ))}
                   {editingSection === "certifications" && <button onClick={() => setCertifications([...certifications, { id: Date.now().toString(), name: "", issuer: "", date: "", credentialId: "", image: "" }])} className="min-h-[100px] border-2 border-dashed border-border-default rounded-2xl flex flex-col items-center justify-center gap-2 text-text-muted hover:text-brand-indigo hover:border-brand-indigo transition-colors hover:bg-brand-indigo/5"><Plus className="w-5 h-5" /><span className="font-bold text-sm">Add Certification</span></button>}
                 </div>
-              </Section>
+              </SectionWrapper>
             )}
 
             {/* Awards & Achievements */}
             {visibleSections.awards && (
-              <Section id="awards" title="Awards & Achievements" icon={<Trophy className="w-6 h-6" />} removable>
+              <SectionWrapper editingSection={editingSection} onSave={saveSection} onEdit={setEditingSection} onRemove={toggleSection} id="awards" title="Awards & Achievements" icon={<Trophy className="w-6 h-6" />} removable>
                 <div className="space-y-5">
                   {awards.map((aw, i) => (
-                    <div key={aw.id} className="flex gap-4">
-                      <div className="w-10 h-10 rounded-xl bg-brand-indigo/10 flex items-center justify-center shrink-0 mt-1"><Trophy className="w-5 h-5 text-brand-indigo" /></div>
+                    <div key={aw.id} className="bg-bg-primary p-4 rounded-2xl border border-border-default flex gap-4">
                       {editingSection === "awards" ? (
-                        <div className="flex-1 space-y-2 bg-bg-primary p-4 rounded-xl border border-border-subtle relative">
-                          <button onClick={() => setAwards(removeItem(awards, i))} className="absolute top-2 right-2 p-1 text-text-muted hover:text-danger"><Trash2 className="w-4 h-4" /></button>
-                          <input value={aw.title} onChange={(e) => setAwards(awards.map((a, idx) => idx === i ? { ...a, title: e.target.value } : a))} className="font-bold text-text-primary bg-transparent border-b border-border-default focus:border-brand-indigo outline-none w-[90%]" placeholder="Award Title" />
-                          <input value={aw.issuer} onChange={(e) => setAwards(awards.map((a, idx) => idx === i ? { ...a, issuer: e.target.value } : a))} className="text-sm text-text-secondary bg-transparent border-b border-border-default focus:border-brand-indigo outline-none w-full" placeholder="Issuing Organization" />
-                          <input value={aw.date} onChange={(e) => setAwards(awards.map((a, idx) => idx === i ? { ...a, date: e.target.value } : a))} className="text-xs text-text-muted bg-transparent border-b border-border-default focus:border-brand-indigo outline-none w-full" placeholder="Date" />
-                          <textarea value={aw.desc} onChange={(e) => setAwards(awards.map((a, idx) => idx === i ? { ...a, desc: e.target.value } : a))} rows={2} className="w-full text-sm text-text-secondary bg-transparent border-b border-border-default focus:border-brand-indigo outline-none resize-none" placeholder="Description" />
+                        <div className="w-full flex gap-4 relative pr-6">
+                          <button onClick={() => setAwards(removeItem(awards, i))} className="absolute top-0 right-0 p-1 text-text-muted hover:text-danger"><Trash2 className="w-4 h-4" /></button>
+                          <label className="w-16 h-16 bg-bg-tertiary rounded-xl shrink-0 flex items-center justify-center cursor-pointer overflow-hidden border border-dashed border-border-default hover:border-brand-indigo transition-colors">
+                            <input type="file" accept="image/*" className="hidden" onChange={(e) => handleAwardImageUpload(aw.id, e)} />
+                            {aw.image ? <img src={aw.image} className="w-full h-full object-cover" /> : <ImageIcon className="w-5 h-5 text-text-muted" />}
+                          </label>
+                          <div className="flex-1 space-y-2">
+                            <input value={aw.title} onChange={(e) => setAwards(awards.map((a, idx) => idx === i ? { ...a, title: e.target.value } : a))} className="font-bold text-text-primary bg-transparent border-b border-border-default focus:border-brand-indigo outline-none w-full" placeholder="Award Title" />
+                            <input value={aw.issuer} onChange={(e) => setAwards(awards.map((a, idx) => idx === i ? { ...a, issuer: e.target.value } : a))} className="text-sm text-text-secondary bg-transparent border-b border-border-default focus:border-brand-indigo outline-none w-full" placeholder="Issuing Organization" />
+                            <input value={aw.date} onChange={(e) => setAwards(awards.map((a, idx) => idx === i ? { ...a, date: e.target.value } : a))} className="text-xs text-text-muted bg-transparent border-b border-border-default focus:border-brand-indigo outline-none w-full" placeholder="Date" />
+                            <textarea value={aw.desc} onChange={(e) => setAwards(awards.map((a, idx) => idx === i ? { ...a, desc: e.target.value } : a))} rows={2} className="w-full text-sm text-text-secondary bg-transparent border-b border-border-default focus:border-brand-indigo outline-none resize-none" placeholder="Description" />
+                          </div>
                         </div>
                       ) : (
-                        <div className="flex-1">
-                          <h3 className="font-bold text-text-primary">{aw.title}</h3>
-                          <p className="text-sm text-text-secondary">{aw.issuer} • {aw.date}</p>
-                          {aw.desc && <p className="text-sm text-text-muted mt-1 leading-relaxed">{aw.desc}</p>}
-                        </div>
+                        <>
+                          <div className="w-16 h-16 bg-bg-tertiary rounded-xl shrink-0 flex items-center justify-center border border-border-subtle overflow-hidden">
+                            {aw.image ? <img src={aw.image} className="w-full h-full object-cover" /> : <Trophy className="w-6 h-6 text-text-muted" />}
+                          </div>
+                          <div className="pt-1">
+                            <h3 className="font-bold text-text-primary leading-tight mb-1">{aw.title}</h3>
+                            <p className="text-sm text-text-secondary">{aw.issuer} • {aw.date}</p>
+                            {aw.desc && <p className="text-sm text-text-muted mt-1 leading-relaxed">{aw.desc}</p>}
+                          </div>
+                        </>
                       )}
                     </div>
                   ))}
                   {editingSection === "awards" && <button onClick={() => setAwards([...awards, { id: Date.now().toString(), title: "", issuer: "", date: "", desc: "" }])} className="w-full py-3 border-2 border-dashed border-border-default rounded-xl text-sm font-bold text-text-muted hover:text-brand-indigo hover:border-brand-indigo transition-colors flex items-center justify-center gap-2"><Plus className="w-4 h-4" />Add Award</button>}
                 </div>
-              </Section>
+              </SectionWrapper>
             )}
 
             {/* Volunteer Experience */}
             {visibleSections.volunteer && (
-              <Section id="volunteer" title="Volunteer Experience" icon={<Users className="w-6 h-6" />} removable>
+              <SectionWrapper editingSection={editingSection} onSave={saveSection} onEdit={setEditingSection} onRemove={toggleSection} id="volunteer" title="Volunteer Experience" icon={<Users className="w-6 h-6" />} removable>
                 <div className="space-y-6">
                   {volunteer.map((vol, i) => (
                     <div key={vol.id} className="flex gap-4">
@@ -649,12 +655,12 @@ export default function ProfilePage() {
                   ))}
                   {editingSection === "volunteer" && <button onClick={() => setVolunteer([...volunteer, { id: Date.now().toString(), role: "", org: "", duration: "", desc: "" }])} className="w-full py-3 border-2 border-dashed border-border-default rounded-xl text-sm font-bold text-text-muted hover:text-brand-indigo hover:border-brand-indigo transition-colors flex items-center justify-center gap-2"><Plus className="w-4 h-4" />Add Volunteer</button>}
                 </div>
-              </Section>
+              </SectionWrapper>
             )}
 
             {/* Publications */}
             {visibleSections.publications && (
-              <Section id="publications" title="Publications" icon={<BookOpen className="w-6 h-6" />} removable>
+              <SectionWrapper editingSection={editingSection} onSave={saveSection} onEdit={setEditingSection} onRemove={toggleSection} id="publications" title="Publications" icon={<BookOpen className="w-6 h-6" />} removable>
                 <div className="space-y-4">
                   {publications.map((pub, i) => (
                     <div key={pub.id} className="flex gap-4">
@@ -678,12 +684,12 @@ export default function ProfilePage() {
                   ))}
                   {editingSection === "publications" && <button onClick={() => setPublications([...publications, { id: Date.now().toString(), title: "", publisher: "", date: "", link: "" }])} className="w-full py-3 border-2 border-dashed border-border-default rounded-xl text-sm font-bold text-text-muted hover:text-brand-indigo hover:border-brand-indigo transition-colors flex items-center justify-center gap-2"><Plus className="w-4 h-4" />Add Publication</button>}
                 </div>
-              </Section>
+              </SectionWrapper>
             )}
 
             {/* Custom Sections */}
             {customSections.map((section) => (
-              <Section key={section.id} id={`custom-${section.id}`} title={section.title} icon={<FolderOpen className="w-6 h-6" />} removable>
+              <SectionWrapper editingSection={editingSection} onSave={saveSection} onEdit={setEditingSection} onRemove={handleRemoveSection} key={section.id} id={`custom-${section.id}`} title={section.title} icon={<FolderOpen className="w-6 h-6" />} removable>
                 {editingSection === `custom-${section.id}` ? (
                   <div className="space-y-3">
                     <input value={section.title} onChange={(e) => setCustomSections(customSections.map((s) => s.id === section.id ? { ...s, title: e.target.value } : s))} className="w-full font-bold text-xl text-text-primary bg-bg-primary px-4 py-2 rounded-lg border border-border-default focus:border-brand-indigo outline-none" placeholder="Section Title" />
@@ -692,7 +698,7 @@ export default function ProfilePage() {
                 ) : (
                   <p className="text-text-secondary leading-relaxed text-base">{section.content}</p>
                 )}
-              </Section>
+              </SectionWrapper>
             ))}
 
             {/* Add Section Menu */}

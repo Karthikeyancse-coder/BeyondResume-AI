@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Download, FileText, Settings, Eye, ShieldCheck, AlertTriangle, X } from "lucide-react";
+import { ArrowLeft, Download, FileText, Settings, Eye, ShieldCheck } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
 import PageWrapper from "@/components/layout/PageWrapper";
 import TemplateCard, { type TemplateName } from "@/components/resume/TemplateCard";

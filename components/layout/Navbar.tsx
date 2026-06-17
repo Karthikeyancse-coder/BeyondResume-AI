@@ -62,7 +62,7 @@ export default function Navbar() {
         ) : (
           <>
             <NotificationBell />
-            <Link href="/profile" className="flex items-center space-x-2 p-1 rounded-md hover:bg-bg-tertiary transition-colors">
+            <Link href={user?.role === "RECRUITER" ? "/recruiter/profile" : "/profile"} className="flex items-center space-x-2 p-1 rounded-md hover:bg-bg-tertiary transition-colors">
               <div className="w-8 h-8 rounded-full overflow-hidden bg-brand-gradient flex items-center justify-center text-white font-bold text-sm">
                 {user?.avatar ? (
                   <img src={user.avatar} alt="Avatar" className="w-full h-full object-cover" />

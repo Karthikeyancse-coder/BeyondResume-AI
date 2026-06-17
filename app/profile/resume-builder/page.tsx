@@ -13,6 +13,7 @@ import { generateResumePDF } from "@/lib/pdf-generator";
 import { getResumeData, defaultEnabledSections, type EnabledSections } from "@/lib/resume-data-mapper";
 import { useProfileStore } from "@/store/useProfileStore";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 export default function ResumeBuilderPage() {
   const { user, isAuthenticated } = useAuthStore();
@@ -59,7 +60,7 @@ export default function ResumeBuilderPage() {
     });
     setTimeout(() => {
       setIsUploading(false);
-      alert("Resume successfully uploaded to your profile!");
+      toast.success("Resume successfully saved to your profile!");
     }, 600);
   };
 

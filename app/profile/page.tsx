@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuthStore } from "@/store/useAuthStore";
-import { useProfileStore } from "@/store/useProfileStore";
+import { useProfileStore, type ExperienceItem, type EducationItem, type SkillItem, type ProjectItem, type CertItem, type LanguageItem, type AwardItem, type VolunteerItem, type PublicationItem, type CustomSection, type ContactInfo } from "@/store/useProfileStore";
 import PageWrapper from "@/components/layout/PageWrapper";
 import { motion, AnimatePresence } from "framer-motion";
 import { fadeUp, staggerContainer } from "@/lib/animations";
@@ -15,23 +15,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
-/* ── Types ── */
-interface ExperienceItem { role: string; company: string; duration: string; desc: string; }
-interface EducationItem { school: string; degree: string; field: string; year: string; gpa: string; }
-interface SkillItem { name: string; level: number; }
-interface ProjectItem { id: string; name: string; desc: string; tech: string; link: string; isPinned: boolean; }
-interface CertItem { id: string; name: string; issuer: string; date: string; credentialId: string; image?: string; }
-interface LanguageItem { id: string; name: string; proficiency: number; }
-interface AwardItem { id: string; title: string; issuer: string; date: string; desc: string; }
-interface VolunteerItem { id: string; role: string; org: string; duration: string; desc: string; }
-interface PublicationItem { id: string; title: string; publisher: string; date: string; link: string; }
-interface CustomSection { id: string; title: string; content: string; }
-
-/* ── Contact Info ── */
-interface ContactInfo {
-  email: string; phone: string; website: string;
-  github: string; linkedin: string; twitter: string;
-}
+/* ── End Types ── */
 
 const SectionWrapper = ({ id, title, icon, children, removable, editingSection, onSave, onEdit, onRemove }: { id: string; title: string; icon?: React.ReactNode; children: React.ReactNode; removable?: boolean; editingSection: string | null; onSave: (id: string) => void; onEdit: (id: string) => void; onRemove: (id: string) => void; }) => (
   <motion.div variants={fadeUp} className="bg-bg-secondary p-6 md:p-8 rounded-3xl shadow-sm border border-border-default group/section relative">
